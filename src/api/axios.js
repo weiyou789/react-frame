@@ -7,6 +7,7 @@ import {changeState} from '@/store/actions/common'
 // axios.defaults.baseURL = interfaceUrl
 axios.defaults.baseURL = interfaceUrl
 const requestArr = []
+import { Toast} from 'antd-mobile';
 // axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 /**
  * 声明一个数组用于存储每个请求的取消函数和标识(请求如果还在pending，同个请求就被取消)
@@ -78,7 +79,9 @@ let resizeTimer = null
 
 export function showLoading() {
     if (loadingCount === 0) {
-        store.dispatch(changeState (true))
+        console.log(loadingCount);
+        
+        // Toast.loading('Loading...');
     }
     loadingCount++
 }
@@ -90,7 +93,7 @@ export function hideLoading() {
     if (loadingCount === 0) {
         if (resizeTimer) clearTimeout(resizeTimer)
         resizeTimer = setTimeout(() => {
-           store.dispatch(changeState (false))
+            // Toast.hide();
         }, 300)
     }
 }

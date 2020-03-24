@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import { renderRoutes } from 'react-router-config'
 import { Switch, BrowserRouter } from 'react-router-dom'
 import routes from './router'
+import AppRouter from './router'
 import store from './store'
 import '@/api/axios.js'
 
@@ -23,7 +24,7 @@ const App = () => (
     <Provider store={store}>
         <BrowserRouter>
             <Switch>
-                {renderRoutes(routes)}
+               <AppRouter />
             </Switch>
         </BrowserRouter>
     </Provider>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import ReList from './ReList'
+
 
 import * as actions from '../store/actions/common'
 
@@ -18,10 +18,11 @@ class Layout extends Component {
     render () {
         console.log('this.props',this.props)
         return (
-            <div>
-                <Button>default</Button><WhiteSpace />
+            <div className='layout'>
+                {/* <Button>default</Button><WhiteSpace />
                 <Button disabled>default disabled</Button><WhiteSpace />
-                <ReList />
+                <ReList /> */}
+                {this.props.children}
             </div>
         );
     }

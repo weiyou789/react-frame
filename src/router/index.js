@@ -1,24 +1,57 @@
-import layout from '../views/layout'
-import message from '../components/message'
+/* eslint-disable import/extensions */
+import React, { Suspense } from 'react';
+//HashRouter
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
-const routes = [
-        {
-            path: '/layout',
-            exact: true,
-            component: layout
-        },
-        {
-            path: '/',
-            component: layout,
-            routes: [ // 嵌套路由
-                {
-                    path: '/message',
-                    exact: true,
-                    component: message,
+import LoadingPage from '../components/loadPage'
+import routers from './routers';
+
+const renderRoutes = routes => {
+    if (!Array.isArray(routes)) {
+        return null;
+    }
+
+    return (
+        <Switch>
+            {routes.map((route, index) => {
+                if (route.redirect) {
+                    return (
+                        <Redirect
+                            key={route.path || index}
+                            exact={route.exact}
+                            strict={route.strict}
+                            from={route.path}
+                            to={route.redirect}
+                        />
+                    );
                 }
-            ]
-        }
-    ]
 
+                return (
+                    <Route
+                        key={route.path || index}
+                        path={route.path}
+                        exact={route.exact}
+                        strict={route.strict}
+                        render={() => {
+                            const renderChildRoutes = renderRoutes(route.children);
+                            if (route.component) {
+                                return (
+                                    <Suspense fallback={<LoadingPage />}>
+                                        <route.component route={route}>{renderChildRoutes}</route.component>
+                                    </Suspense>
+                                );
+                            }
+                            return renderChildRoutes;
+                        }}
+                    />
+                );
+            })}
+        </Switch>
+    );
+};
 
-export default routes;
+const AppRouter = () => {
+    return <Router>{renderRoutes(routers)}</Router>;
+};
+
+export default AppRouter;
