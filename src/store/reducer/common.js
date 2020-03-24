@@ -1,15 +1,15 @@
-import {SAVE_TRAND} from '../actions/actionTypes'
+import {LOAD_STATE} from '../actions/commonType'
 
 const initialState = {
-    mapData:[],
+    loadstate:false
 }
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case SAVE_TRAND:
+        case LOAD_STATE:
             return {
                 ...state,
-                ...action.payLoad
+                loadstate:action.payLoad
             }
         default:
             return state

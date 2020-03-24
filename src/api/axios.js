@@ -1,39 +1,96 @@
-import axios from 'axios'
-// import store from '@/store/index'
-// import { Message } from 'element-ui'
-// import { B2bUrl } from './config'
-import qs from 'qs'
-
-axios.defaults.baseURL = 'https://testb2b-gateway.hosjoy.com:4832/'
-
-axios.interceptors.request.use(async function (config) {
-    // 登录token带到请求的头部中，用于校验登录状态
-    const token = sessionStorage.getItem('access_token')
-    token && (config.headers['Authorization'] = `Bearer ${token}`)
-
-    return config
-}, function (error) {
-    return Promise.reject(error)
-})
-
-axios.interceptors.response.use(function (response) {
-    // 尽调返回code 判断 by-勇哥
-    // eslint-disable-next-line
-    if (response.data.code && response.data.code != 200) {
-
-        return Promise.reject(response)
+import axios, { AxiosResponse, AxiosRequestConfig, CancelTokenStatic, CancelToken } from 'axios'
+// import Router from '../router'
+import { interfaceUrl } from './config'
+// import { Toast } from 'vant'
+import store from '@/store/index'
+import {changeState} from '@/store/actions/common'
+// axios.defaults.baseURL = interfaceUrl
+axios.defaults.baseURL = interfaceUrl
+const requestArr = []
+// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
+/**
+ * 声明一个数组用于存储每个请求的取消函数和标识(请求如果还在pending，同个请求就被取消)
+ * @param  {[type]} Config    [axios 配置对象]
+ */
+const cancelRequst = (config) => {
+  
+    for (let key = 0; key < requestArr.length; key++) {
+        if (requestArr[key].url === `${config.url}&${config.method}&${JSON.stringify(config.data)}`) {
+            // 如果当前请求在数组中存在时
+            requestArr[key].cancel(`:::取消${config.url}重复${config.method}请求，参数${JSON.stringify(config.data)}`) // 执行取消操作 在pending的才会cancel
+            requestArr.splice(Number(key), 1) // 移除这条记录
+            hideLoading()
+        }
     }
-    return response
-}, function (error) {
-    // TODO: 异常统一处理
-    let errorMessage = ''
-    if (error.response && error.response.status === 400) {
-        errorMessage = error.response.data.message
-    } else {
-        errorMessage = '服务器响应错误：' + error
+}
+// eslint-disable-next-line
+const newCancelToken = axios.CancelToken
+axios.interceptors.request.use(
+    (config) => {
+        if (config.method === 'post') {
+            cancelRequst(config)
+            config.cancelToken = new newCancelToken(cancelMethod => {
+                requestArr.push({ url: `${config.url}&${config.method}&${JSON.stringify(config.data)}`, cancel: cancelMethod })
+            })
+        }
+        showLoading()
+        return config
+    },
+    error => {
+        // Toast(error)
+        return Promise.reject(error)
     }
-    console.log(errorMessage)
-    return Promise.reject(error)
-})
+)
 
-export default axios
+axios.interceptors.response.use(
+    response => {
+        if (response.data.code && response.data.code !== 200) {
+            hideLoading()
+            // Toast(response.data.message || response.data.msg)
+            return Promise.reject(response)
+        }
+        hideLoading()
+        return response
+    },
+    error => {
+        // 如果请求被取消则进入该方法判断
+        if (axios.isCancel(error)) {
+            console.log('🤡 Request canceled', error.message)
+            hideLoading()
+        } else {
+            // handle error
+            console.log('error', error)
+            if (error.request.status === 0) {
+                hideLoading()
+                // Router.replace({ path: '/error' })
+                return
+            }
+            // TODO: 异常统一处理
+            store.dispatch(changeState (false))
+            // Toast('服务器响应错误,请联系管理')
+            return Promise.reject(error)
+        }
+    }
+)
+
+let loadingCount = 0
+let resizeTimer = null
+
+export function showLoading() {
+    if (loadingCount === 0) {
+        store.dispatch(changeState (true))
+    }
+    loadingCount++
+}
+
+export function hideLoading() {
+    if (loadingCount <= 0) return
+    loadingCount--
+    // fix多个请求下有某个请求提前结束，导致 loading 关闭的问题。
+    if (loadingCount === 0) {
+        if (resizeTimer) clearTimeout(resizeTimer)
+        resizeTimer = setTimeout(() => {
+           store.dispatch(changeState (false))
+        }, 300)
+    }
+}

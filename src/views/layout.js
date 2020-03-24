@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import ReList from './ReList'
 
-import { Button, WhiteSpace, WingBlank } from 'antd-mobile';
+import * as actions from '../store/actions/common'
+
+import { Button, WhiteSpace } from 'antd-mobile';
 
 
-function mapStateToProps (state) {
-    return {
+@connect(
+    state=>state.Comreducer, 
+    dispatch=>bindActionCreators(actions,dispatch)
+)
 
-    };
-}
-
-class layout extends Component {
+class Layout extends Component {
     // 这里要对
     render () {
-        console.log(this.props)
+        console.log('this.props',this.props)
         return (
             <div>
                 <Button>default</Button><WhiteSpace />
@@ -25,6 +27,4 @@ class layout extends Component {
     }
 }
 
-export default connect(
-    mapStateToProps,
-)(layout);
+export default Layout
