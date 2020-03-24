@@ -81,7 +81,7 @@ export function showLoading() {
     if (loadingCount === 0) {
         console.log(loadingCount);
         
-        // Toast.loading('Loading...');
+        Toast.loading('Loading...');
     }
     loadingCount++
 }
@@ -93,7 +93,7 @@ export function hideLoading() {
     if (loadingCount === 0) {
         if (resizeTimer) clearTimeout(resizeTimer)
         resizeTimer = setTimeout(() => {
-            // Toast.hide();
+            Toast.hide();
         }, 300)
     }
 }
