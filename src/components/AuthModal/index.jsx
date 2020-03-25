@@ -47,6 +47,7 @@ export default class Modal extends Component {
     render () {
         const {_isOpened} = this.state;
         const {content,title,cancelText,confirmText,popup, animationType, openType} = this.props;
+        // console.log(333111, this.props)
 
         const rootClass = classNames('mp-modal',{
             'mp-modal--active':_isOpened
@@ -89,16 +90,16 @@ export default class Modal extends Component {
                             <div  className='mp-modal__footer'>
                                 <div className='mp-modal__action'>
                                     {
-                                        cancelText && <Button onClick={this.onCancel}>{cancelText}</Button>
+                                        cancelText && <button type='button' onClick={this.onCancel}>{cancelText}</button>
                                     }
                                     {
-                                        confirmText && !openType && <Button onClick={this.onConfirm}>{confirmText}</Button>
+                                        confirmText && !openType && <button type='button' onClick={this.onConfirm}>{confirmText}</button>
                                     }
                                     {
-                                        confirmText && openType==='getUserInfo'&&<Button open-type={openType||''} onGetUserInfo={this.onConfirm}>{confirmText}</Button>
+                                        confirmText && openType==='getUserInfo'&&<button type='button' open-type={openType||''} onGetUserInfo={this.onConfirm}>{confirmText}</button>
                                     }
                                     {
-                                        confirmText && openType==='getPhoneNumber'&&<Button open-type={openType||''} onGetPhoneNumber={this.onConfirm}>{confirmText}</Button>
+                                        confirmText && openType==='getPhoneNumber'&&<button type='button' open-type={openType||''} onGetPhoneNumber={this.onConfirm}>{confirmText}</button>
                                     }
                                 </div>
                             </div>

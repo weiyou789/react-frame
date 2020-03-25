@@ -46,11 +46,11 @@ class Test extends Component {
             <div className='z'>
                 text
                 <AuthModal
-                    {...modal}
                     onConfirm={this.onConfirm}
                     onCancel={this.onCancel}
+                    {...modal}
                 />
-                <Button type="primary" onClick={() => this.setState({ modal: { isOpened: true } })}>primary1111</Button>
+                <Button type="primary" onClick={() => this.setState({ modal: { ...modal,isOpened: true } })}>primary1111</Button>
                 <Button className='add_btn' onClick={this.props.add}>+</Button>
                 <Button className='dec_btn' onClick={this.props.minus}>-</Button>
                 <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>

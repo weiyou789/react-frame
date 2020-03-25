@@ -26,8 +26,8 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 590px;
-    border-radius: 12px;
+    width: 295px;
+    border-radius: 6px;
     transform: translate(-50%,-50%);
     background: #ffffff;
   }
@@ -50,20 +50,20 @@
 
 
   &__title{
-    padding-top: 60px;
+    padding-top: 30px;
     width: 100%;
     text-align: center;
     color:#333;
-    font-size: 34px;
+    font-size: 16px;
   }
 
   &__content{
-    padding-top: 30px;
-    padding-bottom: 60px;
+    padding-top: 15px;
+    padding-bottom: 30px;
     width: 100%;
     text-align: center;
     color:#333;
-    font-size: 30px;
+    font-size: 16px;
   }
 
 
@@ -72,13 +72,13 @@
     border-top: 1px solid #ddd;
 
     &>button{
-      flex: auto;
+      flex: 1;
       border-radius: 0px;
       border: 0px;
-      height: 80px;
-      line-height: 80px;
+      height: 40px;
+      line-height: 40px;
       background: transparent;
-      font-size: 32px;
+      font-size: 16px;
 
       &::after{
         border: 0px;
