@@ -1,7 +1,5 @@
 import React from 'react';
 import { Provider } from 'react-redux'
-
-import { renderRoutes } from 'react-router-config'
 import { BrowserRouter } from 'react-router-dom'
 import AppRouter from './router'
 import store from './store'

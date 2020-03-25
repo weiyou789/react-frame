@@ -7,21 +7,21 @@ import * as actions from '../../redux/testRedux'
 
 import { Button } from 'antd-mobile';
 
-@connect(state=>state.test, dispatch=>bindActionCreators(actions,dispatch))
+@connect(state => state.test, dispatch => bindActionCreators(actions, dispatch))
 class Test extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
-            modal:{
-                title:'微信授权1',
-                isOpened:false,
-                content:'好享家申请获取用户微信权限',
-                cancelText:'拒绝',
-                confirmText:'允许',
-                closeOnClickOverlay:false,
-                openType:'',
-                orderId:'111111'
+            modal: {
+                title: '微信授权1',
+                isOpened: false,
+                content: '好享家申请获取用户微信权限',
+                cancelText: '拒绝',
+                confirmText: '允许',
+                closeOnClickOverlay: false,
+                openType: '',
+                orderId: '111111'
             }
         }
     }
@@ -33,8 +33,8 @@ class Test extends Component {
 
     onCancel = () => {
         this.setState({
-            modal:{
-                isOpened:false
+            modal: {
+                isOpened: false
             }
         })
     }
@@ -44,12 +44,13 @@ class Test extends Component {
         const { modal } = this.state
         return (
             <div className='z'>
+                text
                 <AuthModal
                     {...modal}
                     onConfirm={this.onConfirm}
                     onCancel={this.onCancel}
                 />
-                <Button type="primary" onClick={()=>this.setState({modal:{isOpened:true}})}>primary1111</Button>
+                <Button type="primary" onClick={() => this.setState({ modal: { isOpened: true } })}>primary1111</Button>
                 <Button className='add_btn' onClick={this.props.add}>+</Button>
                 <Button className='dec_btn' onClick={this.props.minus}>-</Button>
                 <Button className='dec_btn' onClick={this.props.asyncAdd}>async</Button>

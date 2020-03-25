@@ -1,10 +1,10 @@
 import React from 'react';
 
 function LoadingPage (props) {
-    
+
     return (
         <div>
-            加载中...
+            {/* 加载中... */}
         </div>
     );
 }
