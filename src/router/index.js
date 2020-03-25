@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 //HashRouter
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
-import LoadingPage from '../components/loadPage'
+import LoadingPage from '../layout/loadPage'
 import routers from './routers';
 
 const renderRoutes = routes => {

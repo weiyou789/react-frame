@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import layout from '../components/layout';
+import layout from '../layout/layout';
 
 const config = [
     {
@@ -13,13 +13,13 @@ const config = [
         children: [
             // 子菜单路由
             {
-                path: '/z', // 路由路径
+                path: '/test', // 路由路径
                 isMenu: false,
                 meta: {
-                    title: 'z',
+                    title: 'test',
                     icon: 'xxx'
                 },
-                component: lazy(() => import('../views/z')), // 懒加载 路由组件
+                component: lazy(() => import('../views/test')), // 懒加载 路由组件
             }
 
         ],
