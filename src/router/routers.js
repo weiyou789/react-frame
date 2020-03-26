@@ -13,9 +13,17 @@ const config = [
         path: '/wxauth',
         exact: true,
         meta: {
-            title: '企业微信'
+            title: '企业授权'
         },
         component: lazy(() => import('../views/wxauthPage')), // 懒加载 路由组件
+    },
+    {
+        path: '/addcustomer',
+        exact: true,
+        meta: {
+            title: '添加客户'
+        },
+        component: lazy(() => import('../views/customerPage')), // 懒加载 路由组件
     },
     {
         path: '/test', // 路由路径
