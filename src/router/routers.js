@@ -10,6 +10,14 @@ const config = [
         component: lazy(() => import('../views/homePage')), // 懒加载 路由组件
     },
     {
+        path: '/wxauth',
+        exact: true,
+        meta: {
+            title: '企业微信'
+        },
+        component: lazy(() => import('../views/wxauthPage')), // 懒加载 路由组件
+    },
+    {
         path: '/test', // 路由路径
         exact: true,
         meta: {
