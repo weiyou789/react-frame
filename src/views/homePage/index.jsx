@@ -28,7 +28,7 @@ class HomePage extends Component {
                 { title: '公司（0）' },
                 { title: '工程项目（0）' },
             ],
-            dataSource, dataSource,
+            dataSource,
             listData: [],
             _listData: [],
             pageNumber: 1,
@@ -60,7 +60,7 @@ class HomePage extends Component {
         this.setState({
             pageNumber: pageNumber + 1,
             dataSource: dataSource.cloneWithRows(records), // 数据源dataSource
-            _listData: records,
+            listData: records,
             isLoading: false
         })
     }
@@ -72,8 +72,6 @@ class HomePage extends Component {
         //     return false
         // }
         const { pageNumber, pageSize, listData } = this.state
-        console.log(listData.length)
-        console.log(this, this.props.customerData.total)
         if (listData.length < this.props.customerData.total) {
             await this.props.findCustomerList({
                 merchantCode: '668e98c9419330e4de5421e263b3bd4f',
@@ -82,7 +80,7 @@ class HomePage extends Component {
             })
             const { customerData: { records } } = this.props
             this.setState({
-                data: this.state.listData.concat(records)
+                listData: this.state.listData.concat(records)
             })
         }
         // const page = pageNumber + 1
@@ -106,9 +104,11 @@ class HomePage extends Component {
     }
 
     render () {
-        const { tabs, hasMore, pageSize, dataSource } = this.state
+        const { tabs, hasMore, pageSize, dataSource, listData } = this.state
         const { children, customerData: { records = [] } } = this.props
-        this.state.listData = this.state.listData.concat(this.state._listData)
+        console.log(this.state._listData)
+        // this.state.listData = this.state.listData.concat(this.state._listData)
+        // console.log(this.state.listData)
         // 定义Row，从数据源(dataSurce)中接受一条数据循环到ListView
         return (
             <div className='home-page' >
@@ -126,7 +126,7 @@ class HomePage extends Component {
                         <div className="home-page_tabs--list">
                             <ListView
                                 className="home-page_list"
-                                dataSource={dataSource.cloneWithRows(this.state.listData)}
+                                dataSource={dataSource.cloneWithRows(listData)}
                                 pageSize={pageSize}
                                 renderRow={this.customerRow}
                                 onEndReached={this.onEndReached}
