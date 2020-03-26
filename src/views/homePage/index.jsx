@@ -64,7 +64,7 @@ class HomePage extends Component {
 
     // 加载更多
     onEndReached = (event) => {
-        console.log(event)
+        // console.log(event)
         const { isLoading, hasMore } = this.state
         // if (isLoading && !hasMore) {
         //     return false
@@ -106,11 +106,11 @@ class HomePage extends Component {
                     <Tabs tabs={tabs} initialPage={0}>
                         <div className="home-page_tabs--list">
                             <ListView
+                                className="home-page_list"
                                 dataSource={dataSource}
                                 pageSize={pageSize}
                                 renderRow={this.customerRow}
-                                useBodyScroll={true}
-                                onEndReached={(event) => this.onEndReached}
+                                onEndReached={this.onEndReached}
                                 onEndReachedThreshold={10}
                                 renderBodyComponent={() => (
                                     <div className="list-cont">
