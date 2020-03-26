@@ -1,0 +1,54 @@
+.create-project {
+    font-size: 16px;
+    height: 100%;
+    background: #fff;
+    box-sizing: border-box;
+    &__tite {
+        font-weight: bold;
+        padding: 10px 10px 0 10px;
+    }
+    &__name {
+        color: #333;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    &__form {
+        &__title {
+            color: #000;
+            margin: 18px 0 10px;
+            padding-left: 5px;
+        }
+        i {
+            font-style: normal;
+            color: #f00;
+        }
+    }
+
+    .am-list-item .am-list-line .am-list-content {
+        color: #bbb;
+        margin-left: -11px;
+    }
+}
+.am-list-item.am-input-item {
+    padding-left: 0;
+    // border-bottom: 1px solid #c3c1c1;
+    // border-top: 1px solid #c3c1c1;
+}
+.am-list-item.am-list-item-middle .am-list-line {
+    padding-left: 10px;
+}
+.imageviewer {
+    overflow: hidden;
+    height: 100vh;
+}
+.submit {
+    padding-bottom: 20px;
+    text-align: center;
+    .button {
+        display: inline-block;
+        line-height: 40px;
+        border-radius: 40px;
+        border: 1px solid #ddd;
+        text-align: center;
+    }
+}
