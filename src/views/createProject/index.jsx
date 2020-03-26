@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // 导入组件
-import { InputItem, Button, TextareaItem, List, Picker, ImagePicker } from 'antd-mobile';
+import { InputItem, Modal, TextareaItem, List, Picker, ImagePicker } from 'antd-mobile';
 import WxImageViewer from 'react-wx-images-viewer';
 // 导入样式
 import './index.scss'
@@ -112,8 +112,24 @@ class createProject extends Component {
         })
     }
 
-    submit = () => {
+    onSave = () => {
         console.log(this.state.form);
+    }
+
+    onApply = () => {
+        console.log(this.state.form);
+        Modal.alert('去认证', '提交项目需要先为经销商认证', [
+            {
+                text: '暂不认证', onPress: () => {
+                    // do nothing
+                }
+            },
+            {
+                text: '去认证', onPress: () => {
+                    console.log('ok')
+                }
+            },
+        ])
     }
 
     render () {
@@ -143,7 +159,7 @@ class createProject extends Component {
                     <div className='create-project__form__title'><i>*</i>工程项目进度</div>
                     <List>
                         <Picker
-                            extra=" "
+                            extra="123"
                             cols={1}
                             data={seasons}
                             value={this.state.form.progress}
@@ -248,6 +264,7 @@ class createProject extends Component {
                     </List>
                     <div className='create-project__form__title'>附件</div>
                     <ImagePicker
+                        length={5}
                         multiple
                         accept="image/gif,image/jpeg,image/jpg,image/png"
                         files={this.state.form.files}
@@ -263,8 +280,8 @@ class createProject extends Component {
                     {/* end form */}
                 </div>
                 <div className='submit'>
-                    <div onClick={this.submit} className='button' style={{ width: '100px', marginRight: '10px' }}>保存</div>
-                    <div onClick={this.submit} className='button' style={{ width: '130px', color: '#fff', background: '#108ee9' }}>提交申请</div>
+                    <div onClick={this.onSave} className='button' style={{ width: '100px', marginRight: '10px' }}>保存</div>
+                    <div onClick={this.onApply} className='button' style={{ width: '130px', color: '#fff', background: '#4676BC' }}>提交申请</div>
                 </div>
 
             </div >

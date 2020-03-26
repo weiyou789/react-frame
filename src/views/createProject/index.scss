@@ -1,7 +1,7 @@
 .create-project {
     font-size: 16px;
     height: 100%;
-    background: #fff;
+    background: #ededed;
     box-sizing: border-box;
     &__tite {
         font-weight: bold;
@@ -42,7 +42,7 @@
     height: 100vh;
 }
 .submit {
-    padding-bottom: 20px;
+    padding: 5px 0 20px;
     text-align: center;
     .button {
         display: inline-block;
