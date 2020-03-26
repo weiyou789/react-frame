@@ -28,7 +28,9 @@ class HomePage extends Component {
                 { title: '公司（0）' },
                 { title: '工程项目（0）' },
             ],
-            dataSource,
+            dataSource, dataSource,
+            listData: [],
+            _listData: [],
             pageNumber: 1,
             pageSize: 6,
             isLoading: false, // 是否显示加载状态
@@ -58,22 +60,38 @@ class HomePage extends Component {
         this.setState({
             pageNumber: pageNumber + 1,
             dataSource: dataSource.cloneWithRows(records), // 数据源dataSource
-            isLoading: false,
+            _listData: records,
+            isLoading: false
         })
     }
 
     // 加载更多
-    onEndReached = (event) => {
-        // console.log(event)
-        const { isLoading, hasMore } = this.state
+    onEndReached = async () => {
+
         // if (isLoading && !hasMore) {
         //     return false
         // }
-        this.setState({
-            isLoading: true,
-        }, async () => {
-            await this.getCustomerList()
-        })
+        const { pageNumber, pageSize, listData } = this.state
+        console.log(listData.length)
+        console.log(this, this.props.customerData.total)
+        if (listData.length < this.props.customerData.total) {
+            await this.props.findCustomerList({
+                merchantCode: '668e98c9419330e4de5421e263b3bd4f',
+                pageNumber: pageNumber,
+                pageSize: pageSize
+            })
+            const { customerData: { records } } = this.props
+            this.setState({
+                data: this.state.listData.concat(records)
+            })
+        }
+        // const page = pageNumber + 1
+
+        // const { customerData: { records } } = this.props
+        // const data = listData.concat(records)
+        // this.setState({
+        //     dataSource: dataSource.cloneWithRows(data)
+        // })
     }
 
     customerRow = (rowData) => {
@@ -88,8 +106,9 @@ class HomePage extends Component {
     }
 
     render () {
-        const { tabs, dataSource, hasMore, pageSize } = this.state
-        const { children } = this.props
+        const { tabs, hasMore, pageSize, dataSource } = this.state
+        const { children, customerData: { records = [] } } = this.props
+        this.state.listData = this.state.listData.concat(this.state._listData)
         // 定义Row，从数据源(dataSurce)中接受一条数据循环到ListView
         return (
             <div className='home-page' >
@@ -107,11 +126,12 @@ class HomePage extends Component {
                         <div className="home-page_tabs--list">
                             <ListView
                                 className="home-page_list"
-                                dataSource={dataSource}
+                                dataSource={dataSource.cloneWithRows(this.state.listData)}
                                 pageSize={pageSize}
                                 renderRow={this.customerRow}
                                 onEndReached={this.onEndReached}
                                 onEndReachedThreshold={10}
+                                scrollEventThrottle={1000}
                                 renderBodyComponent={() => (
                                     <div className="list-cont">
                                         {children}
