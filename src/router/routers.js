@@ -18,12 +18,36 @@ const config = [
         component: lazy(() => import('../views/wxauthPage')), // 懒加载 路由组件
     },
     {
-        path: '/addcustomer',
+        path: '/addBusiness',
         exact: true,
         meta: {
-            title: '添加客户'
+            title: '创建企业'
         },
-        component: lazy(() => import('../views/customerPage')), // 懒加载 路由组件
+        component: lazy(() => import('../views/addBusiness')), // 懒加载 路由组件
+    },
+    {
+        path: '/authBusiness',
+        exact: true,
+        meta: {
+            title: '认证企业'
+        },
+        component: lazy(() => import('../views/authBusiness')), // 懒加载 路由组件
+    },
+    {
+        path: '/addCustomer',
+        exact: true,
+        meta: {
+            title: '创建客户'
+        },
+        component: lazy(() => import('../views/addCustomer')), // 懒加载 路由组件
+    },,
+    {
+        path: '/customer',
+        exact: true,
+        meta: {
+            title: '客户详情'
+        },
+        component: lazy(() => import('../views/customerDetail')), // 懒加载 路由组件
     },
     {
         path: '/test', // 路由路径
