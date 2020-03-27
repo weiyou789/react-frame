@@ -8,6 +8,7 @@ import './index.scss'
 
 import * as actions from '../../redux/homeRedux'
 
+import searchIcon from '@/assets/imgs/navbar_icon_mune@2x.png'
 @connect(
     state => state.home,
     dispatch => bindActionCreators(actions, dispatch)
@@ -26,11 +27,12 @@ class HomePage extends Component {
             tabs: [
                 { title: '客户（0）' },
                 { title: '公司（0）' },
-                { title: '工程项目（0）' },
+                { title: '好橙工项目（0）' },
             ],
             dataSource,
+            initListData: [],
             pageNumber: 1,
-            pageSize: 6,
+            pageSize: 5,
             isLoading: false, // 是否显示加载状态
             hasMore: true
         }
@@ -40,8 +42,6 @@ class HomePage extends Component {
         this.getCustomerList()
     }
 
-
-    // 获取优惠券数据
     async getCustomerList () {
         const { pageNumber, pageSize, dataSource } = this.state
         await this.props.findCustomerList({
@@ -50,79 +50,102 @@ class HomePage extends Component {
             pageSize: pageSize
         })
         const { customerData: { records } } = this.props
-        // if (records.length < pageSize) {
-        //     this.setState({
-        //         hasMore: false
-        //     })
-        // }
         this.setState({
             pageNumber: pageNumber + 1,
             dataSource: dataSource.cloneWithRows(records), // 数据源dataSource
-            isLoading: false,
+            initListData: records,
+            isLoading: false
         })
     }
 
     // 加载更多
-    onEndReached = (event) => {
-        // console.log(event)
-        const { isLoading, hasMore } = this.state
-        // if (isLoading && !hasMore) {
-        //     return false
-        // }
-        this.setState({
-            isLoading: true,
-        }, async () => {
-            await this.getCustomerList()
-        })
+    onEndReached = async () => {
+        const { pageNumber, pageSize, initListData } = this.state
+        if (initListData.length < this.props.customerData.total) {
+            await this.props.findCustomerList({
+                merchantCode: '668e98c9419330e4de5421e263b3bd4f',
+                pageNumber: pageNumber,
+                pageSize: pageSize
+            })
+            const { customerData: { records } } = this.props
+            this.setState({
+                initListData: this.state.initListData.concat(records)
+            })
+        } else {
+            this.setState({
+                hasMore: false
+            })
+        }
     }
 
     customerRow = (rowData) => {
         return (
-            <div className="list-cont_item" key={rowData}>
-                <div className="list-cont_item--name">{rowData.companyName}</div>
-                <div className="list-cont_item--phone">{rowData.memberAccount}</div>
-                <div className="list-cont_item--company"><span>管理的公司：</span>{rowData.provinceName + rowData.cityName + rowData.countryName}</div>
-                <div className="list-cont_item--date"><span>注册时间：</span>{rowData.id}</div>
+            <div className="list-cont_item item-row" key={rowData}>
+                <div className="item-col list-cont_item--name">{rowData.companyName}</div>
+                <div className="item-col list-cont_item--phone">
+                    <span className="item-col_label">电话</span>
+                    <span className="item-col_text">{rowData.memberAccount}</span>
+                </div>
+                <div className="item-col list-cont_item--company">
+                    <span className="item-col_label">管理公司</span>
+                    <span className="item-col_text">{rowData.provinceName + rowData.cityName + rowData.countryName}</span>
+                </div>
+                <div className="item-col list-cont_item--date">
+                    <span className="item-col_label">注册时间</span>
+                    <span className="item-col_text">{rowData.id}</span>
+                </div>
             </div>
         )
     }
 
     render () {
-        const { tabs, dataSource, hasMore, pageSize } = this.state
+        const { tabs, hasMore, pageSize, dataSource, initListData } = this.state
         const { children } = this.props
-        // 定义Row，从数据源(dataSurce)中接受一条数据循环到ListView
         return (
             <div className='home-page' >
                 <div className="home-page_header">
                     <div className="home-page_header--image"></div>
                     <div className="home-page_header--name">hzbi</div>
+                    <div>-</div>
                     <div className="home-page_header--phone">17551094260</div>
                 </div>
                 <div className="home-page_search">
-                    <div className="home-page_search--input"></div>
+                    <div className="home-page_search--input">
+                        <div className="home-page_search--icon">
+                            <img src={searchIcon}></img>
+                        </div>
+                        <div className="home-page_search--text">可输入客户姓名/公司/项目/手机号</div>
+                    </div>
                 </div>
                 <div className="home-page_tabs-fixed"></div>
                 <div className="home-page_tabs">
                     <Tabs tabs={tabs} initialPage={0}>
                         <div className="home-page_tabs--list">
-                            <ListView
-                                className="home-page_list"
-                                dataSource={dataSource}
-                                pageSize={pageSize}
-                                renderRow={this.customerRow}
-                                onEndReached={this.onEndReached}
-                                onEndReachedThreshold={10}
-                                renderBodyComponent={() => (
-                                    <div className="list-cont">
-                                        {children}
+                            {
+                                initListData.length > 0 ?
+                                    <ListView
+                                        className="home-page_list"
+                                        dataSource={dataSource.cloneWithRows(initListData)}
+                                        pageSize={pageSize}
+                                        renderRow={this.customerRow}
+                                        onEndReached={this.onEndReached}
+                                        onEndReachedThreshold={10}
+                                        scrollEventThrottle={1000}
+                                        renderBodyComponent={() => (
+                                            <div className="list-cont">
+                                                {children}
+                                            </div>
+                                        )}
+                                        renderFooter={() => (
+                                            <div className="list-cont_item--underside">
+                                                {hasMore ? '加载中...' : '到底了~'}
+                                            </div>
+                                        )}
+                                    /> :
+                                    <div className="home-page_empty">
+                                        您还没有客户哦～
                                     </div>
-                                )}
-                                renderFooter={() => (
-                                    <div className="list-cont_item--underside">
-                                        {hasMore ? '加载中...' : '~到底了~'}
-                                    </div>
-                                )}
-                            />
+                            }
                         </div>
                         {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', backgroundColor: '#fff' }}> Content of second tab </div>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', backgroundColor: '#fff' }}> Content of third tab </div> */}

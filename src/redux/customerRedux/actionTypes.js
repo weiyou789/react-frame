@@ -1,0 +1,1 @@
+export const WX_AUTH = "WX_AUTH"
