@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 import React, { Suspense } from 'react';
 //HashRouter
-import { BrowserRouter as Router, Route, Switch, Redirect,withRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect, withRouter } from 'react-router-dom';
 
 import LoadingPage from '../layout/loadPage'
 import routers from './routers';
@@ -52,7 +52,7 @@ const renderRoutes = routes => {
 };
 
 const AppRouter = () => {
-    return <Router>{renderRoutes(routers)}</Router>;
+    return <BrowserRouter>{renderRoutes(routers)}</BrowserRouter>;
 };
 
 export default AppRouter;

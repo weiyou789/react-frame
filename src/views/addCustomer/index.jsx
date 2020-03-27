@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import { withRouter } from "react-router-dom";
 // 导入组件
 import { Button, Picker, InputItem, List, Toast } from 'antd-mobile';
 // 导入样式
@@ -145,4 +144,4 @@ class Addcustomer extends Component {
 
 }
 
-export default withRouter(Addcustomer)
+export default Addcustomer
