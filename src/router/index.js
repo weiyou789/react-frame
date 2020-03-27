@@ -25,7 +25,6 @@ const renderRoutes = routes => {
                         />
                     );
                 }
-
                 return (
                     <Route
                         key={route.path || index}
@@ -36,6 +35,7 @@ const renderRoutes = routes => {
                             const renderChildRoutes = renderRoutes(route.children);
                             const Withrouter = withRouter(route.component)
                             if (route.component) {
+                                document.title = route.meta.title || "";
                                 return (
                                     <Suspense fallback={<LoadingPage />}>
                                         <Withrouter route={route}>{renderChildRoutes}</Withrouter>
