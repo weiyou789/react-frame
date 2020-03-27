@@ -8,9 +8,9 @@ var env = process.env.NODE_ENV === 'development' ? 'development' : (process.env.
     'dev' : process.env.REACT_APP_ENV === 'test' ? 'test' : process.env.REACT_APP_ENV === 'preview' ? 'preview' : 'production')
 switch (env) {
     case 'development':
-        interfaceUrl = 'https://testb2b-gateway.hosjoy.com:4832/'
-        ccpUrl = 'https://testccp.hosjoy.com:4832'
-        // interfaceUrl = 'http://192.168.20.248:40000/'
+        // interfaceUrl = 'https://testb2b-gateway.hosjoy.com:4832/'
+        // ccpUrl = 'https://testccp.hosjoy.com:4832'
+        interfaceUrl = 'http://192.168.20.248:40000/'
         // interfaceUrl = 'https://testb2b-gateway.hosjoy.com:4832/'
         break
     case 'dev':
