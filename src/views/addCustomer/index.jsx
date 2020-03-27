@@ -55,7 +55,7 @@ class Addcustomer extends Component {
         // })
         try {
             Toast.success('添加成功', 1)
-            this.props.history.push({ pathname: '/test', query: {} })
+            this.props.history.push({ pathname: '/customer', query: {} })
         } catch (error) {
             this.setState({
                 isLoading: false
@@ -136,7 +136,7 @@ class Addcustomer extends Component {
 
                 </div>
 
-                <Button onClick={this.onAddInfo} className="customer-page_btn" loading={this.state.isLoading}>添加</Button>
+                <Button onClick={this.onAddInfo} className="customer-page_btn" loading={this.state.isLoading} disabled={this.state.isLoading}>添加</Button>
 
             </div>
         )
