@@ -1,54 +1,93 @@
 .create-project {
     font-size: 16px;
     height: 100%;
-    background: #ededed;
+    background: #efecf0;
     box-sizing: border-box;
+    &__layout {
+        background: #fff;
+    }
     &__tite {
         font-weight: bold;
-        padding: 10px 10px 0 10px;
+        padding: 20px 10px 0 16px;
     }
     &__name {
         color: #333;
-        padding: 10px;
+        padding: 10px 16px;
         margin-bottom: 10px;
     }
     &__form {
         &__title {
-            color: #000;
+            color: #999;
             margin: 18px 0 10px;
             padding-left: 5px;
         }
         i {
+            font-size: 16px;
             font-style: normal;
-            color: #f00;
+            color: #e02020;
+            margin-left: 10px;
+            margin-right: 3px;
         }
+        &__unit {
+            color: #4676bc;
+            font-size: 19px;
+        }
+        &__Image {
+            background: #fff;
+            .am-image-picker-list {
+                padding: 10px;
+            }
+        }
+    }
+    ::-webkit-input-placeholder {
+        color: #c7c7c7;
+        font-size: 16px;
+        font-weight: normal;
+    }
+    .am-list-item.am-input-item {
+        padding-left: 0;
+        // border-bottom: 1px solid #c3c1c1;
+        // border-top: 1px solid #c3c1c1;
+    }
+    .am-list-item.am-list-item-middle .am-list-line {
+        padding-left: 10px;
+    }
+    .imageviewer {
+        overflow: hidden;
+        height: 100vh;
     }
 
     .am-list-item .am-list-line .am-list-content {
         color: #bbb;
         margin-left: -11px;
+        color: #c7c7c7;
+        font-size: 16px;
+        font-weight: normal;
     }
-}
-.am-list-item.am-input-item {
-    padding-left: 0;
-    // border-bottom: 1px solid #c3c1c1;
-    // border-top: 1px solid #c3c1c1;
-}
-.am-list-item.am-list-item-middle .am-list-line {
-    padding-left: 10px;
-}
-.imageviewer {
-    overflow: hidden;
-    height: 100vh;
-}
-.submit {
-    padding: 5px 0 20px;
-    text-align: center;
-    .button {
-        display: inline-block;
-        line-height: 40px;
-        border-radius: 40px;
-        border: 1px solid #ddd;
+    .create-project__form__rate {
+        .am-list-body::before {
+            background-color: #fff;
+            height: 0px;
+        }
+        .am-list-body::after {
+            background-color: #fff;
+            border: 1px dashed #a1a0a0;
+            height: 0px;
+        }
+        .am-list-item .am-input-label {
+            color: #333;
+        }
+    }
+    .submit {
+        margin-top: 33px;
         text-align: center;
+        display: flex;
+        font-size: 18px;
+        color: #333;
+        .button {
+            display: inline-block;
+            line-height: 48px;
+            text-align: center;
+        }
     }
 }
