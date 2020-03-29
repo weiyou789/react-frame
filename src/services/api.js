@@ -12,3 +12,6 @@ export const findMerchant = (params) => axios.get(`/merchant/api/company/boss/me
 export const findNesting = (params) => axios.get(ccpUrl+`/common/region/provinces/nesting`, {params})
 // 获取客户
 export const findCustomerList = (params) => axios.get(`/merchant/api/company/b2b/member`, { params })
+
+// 注册客户
+export const addCustomer = (params) => axios.get(`/uaa/openapi/user/register`, { params })

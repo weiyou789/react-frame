@@ -31,7 +31,7 @@ export default class Addbusiness extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pickerValue: [],
+            pickerValue: ["110000000000", "110100000000", "110101000000"],
             value: ''
         };
     }
@@ -48,7 +48,6 @@ export default class Addbusiness extends Component {
     }
 
     render () {
-
         let antdDistrict = [];
         let districtData = this.props.nestData;
         Object.keys(districtData).forEach((index) => {

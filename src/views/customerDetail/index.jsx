@@ -28,21 +28,10 @@ export default class Customer extends Component {
         // console.log(1, this.props)
     }
 
-    onAuthInfo = () => {
-        this.setState({
-            isLoading: true
-        })
-        const idcardReg = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/
-        console.log(this.state)
-        Toast.info('身份证号有误，请重填')
-        // if (!idcardReg.test(this.individual.credentialNumber)) {
-        //     Toast('身份证号有误，请重填')
-        //     return
-        // }
+    onAddcustomer = () => {
+        this.props.history.push({ pathname: '/addBusiness', query: {} })
     }
-    onHandleChange = (val) => {
-        this.setState({ value: val });
-    }
+    
     render () {
 
         return (
@@ -71,7 +60,7 @@ export default class Customer extends Component {
                 <Item extra={<div className='customer-page_no'>未认证</div>}    >
                    舒适云
                 </Item>
-                <Item >
+                <Item  onClick={this.onAddcustomer}>
                     <img src={require('../../assets/imgs/navbar_icon_mune@2x.png')}  className='customer-page_add'/>创建一个企业
                 </Item>
                 </List>
