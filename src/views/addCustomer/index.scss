@@ -35,20 +35,20 @@
         color: #4477BC;
        
     }
+    .am-list-item.am-input-item {
+        padding-left: 0;
+        // border-bottom: 1px solid #c3c1c1;
+        // border-top: 1px solid #c3c1c1;
+    }
+    
+    .am-list-item.am-list-item-middle .am-list-line {
+        padding-left: 10px;
+    }
+    
+    .am-list-item .am-input-extra{
+      font-size: 14px;
+      display: block;
+      padding: 3px 0;
+    }
 }
 
-.am-list-item.am-input-item {
-    padding-left: 0;
-    // border-bottom: 1px solid #c3c1c1;
-    // border-top: 1px solid #c3c1c1;
-}
-
-.am-list-item.am-list-item-middle .am-list-line {
-    padding-left: 10px;
-}
-
-.am-list-item .am-input-extra{
-  font-size: 14px;
-  display: block;
-  padding: 3px 0;
-}

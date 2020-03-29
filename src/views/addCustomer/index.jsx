@@ -20,7 +20,7 @@ class Addcustomer extends Component {
             formData: {
                 name: '',
                 phone: '',
-                code: ''
+                verificationCode: ''
             },
             count: 30,
             liked: true,
@@ -144,4 +144,4 @@ class Addcustomer extends Component {
 
 }
 
-export default Addcustomer
+export default Addcustomer 

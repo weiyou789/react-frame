@@ -1,52 +1,60 @@
-.customer-page{
+.customer-page {
 
-    &_head{
+    &_head {
         background: #ffffff;
         overflow: hidden;
         display: flex;
         height: 92px;
         box-sizing: border-box;
         align-items: center;
-        padding:  0 15px;
-        border-bottom: 1px solid  #efecec;
+        padding: 0 15px;
+        border-bottom: 1px solid #efecec;
+
         // justify-content: space-around;
-        &-img{
+        &-img {
             width: 52px;
             height: 52px;
-            img{
+
+            img {
                 height: 52px;
             }
         }
-        p{
-            padding-left:15px ;
+
+        p {
+            padding-left: 15px;
             color: #000000;
             font-size: 16px;
         }
     }
-    &_info{
+
+    &_info {
         background: #ffffff;
         padding: 20px 16px;
-        h4{
+
+        h4 {
             color: #000000;
             font-size: 16px;
         }
-        p{
+
+        p {
             padding: 16px 0 0 0;
             font-size: 15px;
-            b{
-                color:#999999;
+
+            b {
+                color: #999999;
                 font-weight: 100;
             }
         }
     }
-    &_title{
+
+    &_title {
         font-size: 16px;
         font-weight: 600;
         color: #000000;
         padding: 20px 16px;
     }
 
-    &_yes{
+    &_yes {
         width: 80px;
         height: 30px;
         border-radius: 5px;
@@ -56,7 +64,8 @@
         background: #91acd5;
         font-size: 14px;
     }
-    &_no{
+
+    &_no {
         width: 80px;
         height: 30px;
         line-height: 30px;
@@ -67,21 +76,24 @@
         font-size: 14px;
         margin-right: 24px;
     }
-    &_add{
-        width: 60px;
-        height: 60px;
-        img{
-            width:60px;
-            height: 60px;
+
+    &_add {
+        width: 40px !important;
+        height: 40px !important;
+
+        img {
+            width: 40px !important;
+            height: 40px !important;
         }
     }
+    .am-list-item .am-list-line {
+        height: 60px;
+    }
+    
+    .am-list-item .am-list-line .am-list-extra {
+        justify-content: flex-end;
+        display: flex;
+    }
+    
 }
 
-.am-list-item .am-list-line{
-    height:60px ;
-}
-
-.am-list-item .am-list-line .am-list-extra{
-    justify-content: flex-end;
-    display: flex;
-}

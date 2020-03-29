@@ -77,6 +77,7 @@ export default class Authbusiness extends Component {
         return (
             <div className='business-page'>
                 <div className='business-page_form'>
+                <div className='business-page_form-title'>上传营业执照</div>
                     <div className='business-page_form-top'>
                         <ImagePicker
                             files={files}
@@ -108,6 +109,7 @@ export default class Authbusiness extends Component {
                             onChange={(val) => { this.onHandleChange(val) }}
                         ></InputItem>
                     </List>
+                    <div className='business-page_form-title'>请上传身份证正反面</div>
                     <div className='business-page_form-info'>
                         <div className='business-page_form-flex'>
                        

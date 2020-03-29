@@ -39,7 +39,9 @@ class HomePage extends Component {
     }
 
     componentDidMount () {
-        this.getCustomerList()
+        console.log(this.props)
+        // this.getCustomerList()
+        this.getProjectpage()
     }
 
     async getCustomerList () {
@@ -58,6 +60,20 @@ class HomePage extends Component {
         })
     }
 
+    async getProjectpage () {
+        const { pageNumber, pageSize, dataSource } = this.state
+        await this.props.findProjectList({
+            pageNumber: pageNumber,
+            pageSize: pageSize,
+        })
+        const { projectData: { records } } = this.props
+        this.setState({
+            pageNumber: pageNumber + 1,
+            dataSource: dataSource.cloneWithRows(records), // 数据源dataSource
+            initListData: records,
+            isLoading: false
+        })
+    }
     // 加载更多
     onEndReached = async () => {
         const { pageNumber, pageSize, initListData } = this.state
@@ -81,7 +97,7 @@ class HomePage extends Component {
     customerRow = (rowData) => {
         return (
             <div className="list-cont_item item-row" key={rowData}>
-                <div className="item-col list-cont_item--name">{rowData.companyName}</div>
+                <div className="item-col list-cont_item--name">{rowData.projectName}</div>
                 <div className="item-col list-cont_item--phone">
                     <span className="item-col_label">电话</span>
                     <span className="item-col_text">{rowData.memberAccount}</span>
