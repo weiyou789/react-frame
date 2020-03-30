@@ -1,7 +1,8 @@
 /* eslint-disable import/extensions */
-import React, { Suspense } from 'react';
+import React, { Suspense,lazy } from 'react';
 //HashRouter
 import { BrowserRouter, Route, Switch, Redirect, withRouter } from 'react-router-dom';
+import { compose } from 'redux'
 
 import LoadingPage from '../layout/loadPage'
 import routers from './routers';
@@ -32,13 +33,14 @@ const renderRoutes = routes => {
                         exact={route.exact}
                         strict={route.strict}
                         render={() => {
+                            const midRouter = [withRouter,lazy]
                             const renderChildRoutes = renderRoutes(route.children);
-                            const Withrouter = withRouter(route.component)
+                            const Wraprouter = compose(...midRouter)(route.component)
                             if (route.component) {
                                 document.title = route.meta.title || "";
                                 return (
                                     <Suspense fallback={<LoadingPage />}>
-                                        <Withrouter route={route}>{renderChildRoutes}</Withrouter>
+                                        <Wraprouter route={route}>{renderChildRoutes}</Wraprouter>
                                     </Suspense>
                                 );
                             }
