@@ -1,12 +1,30 @@
 import React, { Component } from 'react';
 // 导入组件
-import { InputItem, Modal, TextareaItem, List, Picker, ImagePicker } from 'antd-mobile';
+import { InputItem, Modal, TextareaItem, List, Picker, ImagePicker, Toast } from 'antd-mobile';
 import WxImageViewer from 'react-wx-images-viewer';
 // 导入样式
 import './index.scss'
 import { isNum, formatMoney } from '@/utils/format'
 import { creatProject, uploadFiles } from '@/services/api'
 import { seasons, type, equipmentCategory, loanMonth, upstreamSupplierType } from '@/utils/enum'
+import { object } from 'prop-types';
+
+const rules = {
+    projectName: { message: '请输入工程项目名称' },
+    address: { message: '请输入项目地址' },
+    firstPartName: { message: '请输入甲方名称' },
+    type: { message: '请选择项目类别' },
+    progress: { message: '请选择工程项目进度' },
+    contractAmount: { message: '请输入合同总额' },
+    deviceAmount: { message: '请输入设备款总额' },
+    equipmentCategory: { message: '请选择设备品类' },
+    deviceBrand: { message: '请输入设备品牌' },
+    upstreamSupplierType: { message: '请选择上游供应商类型' },
+    upstreamSupplierName: { message: '请输入上游供应商名称' },
+    upstreamPromiseMonth: { message: '请选择上游接受承兑时间' },
+    predictLoanAmount: { message: '请输入预估借款金额' },
+    loanMonth: { message: '请选择预估借款周期' }
+}
 
 class createProject extends Component {
     state = {
@@ -43,7 +61,6 @@ class createProject extends Component {
     }
 
     componentDidMount () {
-        console.log('componentDidMount', this);
     }
 
 
@@ -53,7 +70,6 @@ class createProject extends Component {
             res = isNum(val, 100)//只能输入数字,可限制后几位（小数）
             if (isNaN(res)) res = ''
         }
-        console.log(key, val);
         this.setState({
             form: {
                 ...this.state.form,
@@ -124,16 +140,35 @@ class createProject extends Component {
 
     onSave = async (status = '') => {
         console.log(this.state.form);
-        let params = { ...this.state.form }
-        params.progress = this.state.form.progress[0]
-        params.type = this.state.form.type[0]
-        params.equipmentCategory = this.state.form.equipmentCategory[0]
-        params.loanMonth = this.state.form.loanMonth[0]
-        params.upstreamSupplierType = this.state.form.upstreamSupplierType[0]
-        params.upstreamPromiseMonth = this.state.form.upstreamPromiseMonth[0]
-        params.status = status
-        params.attachmentUrl = null//todo
-        await creatProject(params)
+        //校验必填项
+        let checked = true
+        for (const key in rules) {
+            if (this.state.form[key] == '') {
+                Toast.info(rules[key].message);
+                checked = false
+                break
+            }
+        }
+        if (checked) {
+            const { advancePaymentProportion, deliveryPaymentProportion, installProgressPaymentProportion, acceptancePaymentProportion, realPaymentProportion, auditCalculationPaymentProportion, payOtherText } = this.state.form
+            if (advancePaymentProportion || deliveryPaymentProportion || installProgressPaymentProportion || acceptancePaymentProportion ||
+                realPaymentProportion || auditCalculationPaymentProportion || payOtherText) {
+                let params = { ...this.state.form }
+                params.progress = this.state.form.progress[0]
+                params.type = this.state.form.type[0]
+                params.equipmentCategory = this.state.form.equipmentCategory[0]
+                params.loanMonth = this.state.form.loanMonth[0]
+                params.upstreamSupplierType = this.state.form.upstreamSupplierType[0]
+                params.upstreamPromiseMonth = this.state.form.upstreamPromiseMonth[0]
+                params.status = status
+                params.attachmentUrl = null//todo
+                await creatProject(params)
+                Toast.success('提交成功，请耐心等待总部审核')
+            } else {
+                Toast.info('工程项目回款方式至少填一项');
+            }
+        }
+
     }
 
     onApply = () => {

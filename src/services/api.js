@@ -22,9 +22,9 @@ export const findProjecpage = (params) => axios.get(`/api/project/page`, { param
 // 工程审批
 export const findAduitlist = (params) => axios.get(`/project/audit/${params.projectId}`)
 // 创建工程项目
-export const creatProject = (params) => axios.post(`/project`, params)
+export const creatProject = (params) => axios.post(`/api/project`, params)
 // 工程项目详情
-export const projectDetail = (id) => axios.get(`/project/${id}`)
+export const projectDetail = (id) => axios.get(`/api/project/${id}`)
 //上传图片
-export const uploadFiles = (params) => axios.post(`https://testhbp.hosjoy.com:4832/tms/files/upload`, params)
+export const uploadFiles = (params) => axios.post(`/api/dingding-works/upload.do`, params)
 
