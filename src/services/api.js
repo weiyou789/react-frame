@@ -21,4 +21,10 @@ export const addCustomer = (params) => axios.get(`/uaa/openapi/user/register`, {
 export const findProjecPage = (params) => axios.get(`/project/page`, { params })
 // 工程审批
 export const findAduitlist = (params) => axios.get(`/project/audit/${params.projectId}`)
+// 创建工程项目
+export const creatProject = (params) => axios.post(`/project`, params)
+// 工程项目详情
+export const projectDetail = (id) => axios.get(`/project/${id}`)
+//上传图片
+export const uploadFiles = (params) => axios.post(`https://testhbp.hosjoy.com:4832/tms/files/upload`, params)
 

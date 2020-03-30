@@ -4,15 +4,9 @@ import * as tyeps from './actionTypes'
 import * as api from '@/services/api'
 
 const INITIAL_STATE = {
-    approveData:[]
+    approveData: [],
+    detail: ''
 }
-
-/*export const add = () => {
-    return {
-        type: ADD
-    }
-}*/
-
 export const findAduitlist = (params) => async dispatch => {
     const { data } = await api.findAduitlist(params)
     dispatch({
@@ -22,13 +16,28 @@ export const findAduitlist = (params) => async dispatch => {
 
 }
 
+export const getDetail = (id) => async dispatch => {
+    console.log('id: ', id);
+    const { data } = await api.projectDetail(id)
+    dispatch({
+        type: tyeps.DETAIL,
+        payload: data
+    })
 
-export default function test (state = INITIAL_STATE, action) {
+}
+
+
+export default function project (state = INITIAL_STATE, action) {
     switch (action.type) {
         case tyeps.APPROVE_DATA:
             return {
                 ...state,
                 approveData: action.payload
+            }
+        case tyeps.DETAIL:
+            return {
+                ...state,
+                detail: action.payload
             }
         default:
             return state

@@ -5,50 +5,8 @@ import WxImageViewer from 'react-wx-images-viewer';
 // 导入样式
 import './index.scss'
 import { isNum, formatMoney } from '@/utils/format'
-
-const seasons =
-    [
-        { label: '项目跟踪阶段', value: '1' },
-        { label: '招投标', value: '2' },
-        { label: '合同已签订', value: '3' },
-        { label: '项目已开工', value: '4' }
-    ]
-const type =
-    [
-        { label: '地产项目', value: '1' },
-        { label: '政府公建项目', value: '2' },
-        { label: '市政工程', value: '3' },
-        { label: '办公楼', value: '4' },
-        { label: '厂房', value: '5' },
-        { label: '其他', value: '6' }
-    ]
-const equipmentCategory =
-    [
-        { label: '空调', value: '1' },
-        { label: '采暖', value: '2' },
-        { label: '新风', value: '3' },
-        { label: '净水', value: '4' },
-        { label: '智能化', value: '5' },
-        { label: '辅材', value: '6' },
-        { label: '电梯', value: '7' },
-        { label: '其他', value: '8' }
-    ]
-const loanMonth =
-    [
-        { label: '1个月', value: '1' },
-        { label: '2个月', value: '2' },
-        { label: '3个月', value: '3' },
-        { label: '4个月', value: '4' },
-        { label: '5个月', value: '5' },
-        { label: '6个月', value: '6' }
-    ]
-const upstreamSupplierType =
-    [
-        { label: '厂商', value: '1' },
-        { label: '代理商', value: '2' },
-        { label: '经销商', value: '3' }
-    ]
-
+import { creatProject, uploadFiles } from '@/services/api'
+import { seasons, type, equipmentCategory, loanMonth, upstreamSupplierType } from '@/utils/enum'
 
 class createProject extends Component {
     state = {
@@ -56,24 +14,30 @@ class createProject extends Component {
         imagsUrl: [],
         imagsIndex: '',
         form: {
-            projectName: '',//工程项目名称
-            address: '',//项目地址
-            progress: ['2'],//工程项目进度 ,1：项目跟踪阶段 2：招投标 3：合同已签订 4：项目已开工
-            type: ['2'],//项目类别
-            firstPartName: '',//甲方名称
-            contractAmount: '',//合同总额
-            equipmentCategory: [],//设备品类 [] integer1：空调 2：采暖 3：新风 4：净水 5：智能化 6：辅材 7：电梯 8：其他
-            deviceBrand: '',//设备品牌
-            deviceAmount: '',//设备款总额
-            predictLoanAmount: '',//预估借款金额
-            loanMonth: [],//预估借款周期 ,integer
-            loanPayType: '',//工程项目回款方式,integer 1：预付款 2：货到付款 3：安装进度款 4：验收 5：交付 6：审计结算 7：其他
-            upstreamSupplierType: [],//上游供应商类型,integer 1：厂商 2：代理商 3：经销商
-            upstreamSupplierName: '',//上游供应商名称
-            upstreamPromiseMonth: [],//上游接受承兑时间,integer
-            files: [{
-                url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg',
-                id: '2121',
+            status: '',//1：待提交2：审核中 3：资料收集中 4：待尽调 5：合作关闭 6：待签约 7：待放款 8：贷中 9：合作完成
+            projectName: '',//工程项目名称，必填
+            address: '',//项目地址，必填
+            progress: '',//工程项目进度 ,1：项目跟踪阶段 2：招投标 3：合同已签订 4：项目已开工，必填
+            type: '',//项目类别 1：地产项目 2：政府共建项目 3：市政项目 3：办公楼 4：厂房 5：其他，必填
+            firstPartName: '',//甲方名称，必填
+            contractAmount: '',//合同总额，必填
+            equipmentCategory: '',//设备品类 [] integer1：空调 2：采暖 3：新风 4：净水 5：智能化 6：辅材 7：电梯 8：其他，必填
+            deviceBrand: '',//设备品牌，必填
+            deviceAmount: '',//设备款总额，必填
+            predictLoanAmount: '',//预估借款金额，必填
+            loanMonth: '',//预估借款周期 ,integer，必填
+            upstreamSupplierType: '',//上游供应商类型,integer 1：厂商 2：代理商 3：经销商，必填
+            upstreamSupplierName: '',//上游供应商名称，必填
+            upstreamPromiseMonth: '',//上游接受承兑时间,integer，必填
+            advancePaymentProportion: '',//预付款比例
+            deliveryPaymentProportion: '',//货到付款比例
+            installProgressPaymentProportion: '',//安装进度款比例
+            acceptancePaymentProportion: '',//验收款比例
+            realPaymentProportion: '',//交付款比例
+            auditCalculationPaymentProportion: '',//审计结算款比例
+            payOtherText: '',//其他回款方式内容
+            attachmentUrl: [{
+                url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg'
             }]
         }
     }
@@ -89,6 +53,7 @@ class createProject extends Component {
             res = isNum(val, 100)//只能输入数字,可限制后几位（小数）
             if (isNaN(res)) res = ''
         }
+        console.log(key, val);
         this.setState({
             form: {
                 ...this.state.form,
@@ -98,9 +63,29 @@ class createProject extends Component {
     }
 
     //附件上传或者删除 add or remove
-    onChangeFiles = (files, type, index) => {
+    onChangeFiles = async (files, type, index) => {
         console.log('onChangeFiles');
         console.log(files, type, index);
+        let len = this.state.form.attachmentUrl.length || 0
+        let uploadLen = files.length
+        for (let index = 0; index < (uploadLen - len); index++) {
+            const data = await uploadFiles(files[len + index].url)
+            console.log('data: ', data);
+
+        }
+
+        // if (type === 'add') {
+        //     this.setState(
+        //         {
+        //             form: {
+        //                 ...this.state.form,
+        //                 attachmentUrl: files
+        //             }
+        //         }, () => {
+        //             console.log(this.state.form);
+        //         }
+        //     )
+        // }
 
     }
     // onAddImageClick = (e) => {
@@ -108,9 +93,8 @@ class createProject extends Component {
     //     this.setState({
     //         form: {
     //             ...this.state.form,
-    //             files: this.state.form.files.concat({
-    //                 url: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg',
-    //                 id: '3',
+    //             attachmentUrl: this.state.form.files.concat({
+    //                 url: 'https://zos.alipayobjects.com/rmsportal/hqQWgTXdrlmVVYi.jpeg'
     //             })
     //         }
     //     });
@@ -138,8 +122,18 @@ class createProject extends Component {
         })
     }
 
-    onSave = () => {
+    onSave = async (status = '') => {
         console.log(this.state.form);
+        let params = { ...this.state.form }
+        params.progress = this.state.form.progress[0]
+        params.type = this.state.form.type[0]
+        params.equipmentCategory = this.state.form.equipmentCategory[0]
+        params.loanMonth = this.state.form.loanMonth[0]
+        params.upstreamSupplierType = this.state.form.upstreamSupplierType[0]
+        params.upstreamPromiseMonth = this.state.form.upstreamPromiseMonth[0]
+        params.status = status
+        params.attachmentUrl = null//todo
+        await creatProject(params)
     }
 
     onApply = () => {
@@ -153,6 +147,7 @@ class createProject extends Component {
             {
                 text: '去认证', onPress: () => {
                     console.log('ok')
+                    this.onSave()
                 }
             },
         ])
@@ -191,7 +186,7 @@ class createProject extends Component {
                             clear
                             placeholder="请输入甲方名称"
                             maxLength={50}
-                            value={this.state.form.projectfirstPartName}
+                            value={this.state.form.firstPartName}
                             onChange={(val) => { this.onChange(val, 'firstPartName') }}
                         ></InputItem>
                     </List>
@@ -201,7 +196,7 @@ class createProject extends Component {
                             extra=" "
                             cols={1}
                             data={type}
-                            value={this.state.form.type}
+                            value={[`${this.state.form.type}`]}
                             title="项目类别"
                             onOk={val => this.onChange(val, 'type')}
                         >
@@ -214,7 +209,7 @@ class createProject extends Component {
                             extra=" "
                             cols={1}
                             data={seasons}
-                            value={this.state.form.progress}
+                            value={[`${this.state.form.progress}`]}
                             title="工程项目进度"
                             onOk={val => this.onChange(val, 'progress')}
                         >
@@ -253,7 +248,7 @@ class createProject extends Component {
                             extra=" "
                             cols={1}
                             data={equipmentCategory}
-                            value={this.state.form.equipmentCategory}
+                            value={[`${this.state.form.equipmentCategory}`]}
                             title="设备品类"
                             onOk={val => this.onChange(val, 'equipmentCategory')}
                         >
@@ -276,7 +271,7 @@ class createProject extends Component {
                             extra=" "
                             cols={1}
                             data={upstreamSupplierType}
-                            value={this.state.form.upstreamSupplierType}
+                            value={[`${this.state.form.upstreamSupplierType}`]}
                             title="上游供应商类型"
                             onOk={val => this.onChange(val, 'upstreamSupplierType')}
                         >
@@ -299,7 +294,7 @@ class createProject extends Component {
                             extra=" "
                             cols={1}
                             data={loanMonth}
-                            value={this.state.form.upstreamPromiseMonth}
+                            value={[`${this.state.form.upstreamPromiseMonth}`]}
                             title="上游接受承兑时间"
                             onOk={val => this.onChange(val, 'upstreamPromiseMonth')}
                         >
@@ -325,14 +320,14 @@ class createProject extends Component {
                             extra=" "
                             cols={1}
                             data={loanMonth}
-                            value={this.state.form.loanMonth}
+                            value={[`${this.state.form.loanMonth}`]}
                             title="预估借款周期"
                             onOk={val => this.onChange(val, 'loanMonth')}
                         >
                             <List.Item arrow="horizontal" className='chooseprogress'>{this.state.form.loanMonth.length > 0 ? '' : '请选择预估借款周期'}</List.Item>
                         </Picker>
                     </List>
-                    <div className='create-project__form__title'><i>*</i>工程项目回款方式</div>
+                    <div className='create-project__form__title'><i>*</i>工程项目回款方式（至少填一项）</div>
                     <div className='create-project__form__rate'>
                         <List>
                             <InputItem
@@ -340,8 +335,8 @@ class createProject extends Component {
                                 placeholder="请输入比例"
                                 extra="%"
                                 maxLength={100}
-                                value={this.state.form.loanPayType}
-                                onChange={(val) => { this.onChange(val, 'loanPayType', 'format') }}
+                                value={this.state.form.advancePaymentProportion}
+                                onChange={(val) => { this.onChange(val, 'advancePaymentProportion', 'format') }}
                             ><span style={{ fontSize: '14px' }}>预付款比例</span></InputItem>
                         </List>
                         <List>
@@ -351,8 +346,8 @@ class createProject extends Component {
                                 extra="%"
                                 labelNumber={6}
                                 maxLength={100}
-                                value={this.state.form.loanPayType}
-                                onChange={(val) => { this.onChange(val, 'loanPayType', 'format') }}
+                                value={this.state.form.deliveryPaymentProportion}
+                                onChange={(val) => { this.onChange(val, 'deliveryPaymentProportion', 'format') }}
                             ><span style={{ fontSize: '14px' }}>货到付款比例</span></InputItem>
                         </List>
                         <List>
@@ -362,8 +357,8 @@ class createProject extends Component {
                                 extra="%"
                                 labelNumber={8}
                                 maxLength={100}
-                                value={this.state.form.loanPayType}
-                                onChange={(val) => { this.onChange(val, 'loanPayType', 'format') }}
+                                value={this.state.form.installProgressPaymentProportion}
+                                onChange={(val) => { this.onChange(val, 'installProgressPaymentProportion', 'format') }}
                             ><span style={{ fontSize: '14px' }}>安装进度款比例</span></InputItem>
                         </List>
                         <List>
@@ -372,8 +367,8 @@ class createProject extends Component {
                                 placeholder="请输入比例"
                                 extra="%"
                                 maxLength={100}
-                                value={this.state.form.loanPayType}
-                                onChange={(val) => { this.onChange(val, 'loanPayType', 'format') }}
+                                value={this.state.form.acceptancePaymentProportion}
+                                onChange={(val) => { this.onChange(val, 'acceptancePaymentProportion', 'format') }}
                             ><span style={{ fontSize: '14px' }}>验收款比例</span></InputItem>
                         </List>
                         <List>
@@ -382,8 +377,8 @@ class createProject extends Component {
                                 placeholder="请输入比例"
                                 extra="%"
                                 maxLength={100}
-                                value={this.state.form.loanPayType}
-                                onChange={(val) => { this.onChange(val, 'loanPayType', 'format') }}
+                                value={this.state.form.realPaymentProportion}
+                                onChange={(val) => { this.onChange(val, 'realPaymentProportion', 'format') }}
                             ><span style={{ fontSize: '14px' }}>交付款比例</span></InputItem>
                         </List>
                         <List>
@@ -393,8 +388,8 @@ class createProject extends Component {
                                 extra="%"
                                 labelNumber={8}
                                 maxLength={100}
-                                value={this.state.form.loanPayType}
-                                onChange={(val) => { this.onChange(val, 'loanPayType', 'format') }}
+                                value={this.state.form.auditCalculationPaymentProportion}
+                                onChange={(val) => { this.onChange(val, 'auditCalculationPaymentProportion', 'format') }}
                             ><span style={{ fontSize: '14px' }}>审计结算款比例</span></InputItem>
                         </List>
                     </div>
@@ -403,8 +398,8 @@ class createProject extends Component {
                             clear
                             placeholder="请输入回款方式和回款比例"
                             maxLength={100}
-                            value={this.state.form.loanPayType}
-                            onChange={(val) => { this.onChange(val, 'loanPayType', 'format') }}
+                            value={this.state.form.payOtherText}
+                            onChange={(val) => { this.onChange(val, 'payOtherText', 'format') }}
                         ><span style={{ fontSize: '14px', color: '#333' }}>其它</span></InputItem>
                     </List>
                     <div className='create-project__form__title'>附件</div>
@@ -413,10 +408,10 @@ class createProject extends Component {
                             length={5}
                             multiple
                             accept="image/gif,image/jpeg,image/jpg,image/png"
-                            files={this.state.form.files}
+                            files={this.state.form.attachmentUrl}
                             onChange={this.onChangeFiles}
                             onImageClick={(index, fs) => this.openViewer(index, fs)}
-                            selectable={this.state.form.files.length < 8}
+                            selectable={this.state.form.attachmentUrl.length < 8}
                         />
                     </div>
                     {
@@ -427,7 +422,7 @@ class createProject extends Component {
                     {/* end form */}
                 </div>
                 <div className='submit'>
-                    <div onClick={this.onSave} className='button' style={{ background: '#fff', flex: '1' }}>保存</div>
+                    <div onClick={() => { this.onSave(1) }} className='button' style={{ background: '#fff', flex: '1' }}>保存</div>
                     <div onClick={this.onApply} className='button' style={{ color: '#fff', background: '#4477BC', flex: '1' }}>提交申请</div>
                 </div>
 

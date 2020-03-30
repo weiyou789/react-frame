@@ -7,8 +7,8 @@
         background: #fff;
     }
     &__tite {
-        font-weight: bold;
         padding: 20px 10px 0 16px;
+        color: #999;
     }
     &__name {
         color: #333;
@@ -65,15 +65,6 @@
         font-weight: normal;
     }
     .create-project__form__rate {
-        .am-list-body::before {
-            background-color: #fff;
-            height: 0px;
-        }
-        .am-list-body::after {
-            background-color: #fff;
-            border: 1px dashed #a1a0a0;
-            height: 0px;
-        }
         .am-list-item .am-input-label {
             color: #333;
         }

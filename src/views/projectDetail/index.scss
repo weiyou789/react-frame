@@ -1,0 +1,65 @@
+.project-detail {
+    font-size: 16px;
+    height: 100%;
+    background: #fff;
+    &__status {
+        height: 165px;
+        border-bottom: 8px solid #efecf0;
+        text-align: center;
+        img {
+            margin-top: 35px;
+        }
+        p {
+            font-size: 18px;
+            line-height: 25px;
+            color: #333;
+            margin-top: 21px;
+        }
+    }
+    &__layout {
+        background: #fff;
+        box-sizing: border-box;
+    }
+    &__tite {
+        font-size: 17px;
+        padding: 16px 10px 0 16px;
+        color: #999;
+    }
+    &__content {
+        color: #333;
+        padding: 10px 16px;
+        border-bottom: 1px solid #ddd;
+        span {
+            color: #4676bc;
+            font-size: 16px;
+            margin-right: 6px;
+        }
+    }
+    &__noborder {
+        color: #333;
+        padding: 5px 16px;
+        border: none;
+    }
+    &__img {
+        margin-top: 4px;
+        box-sizing: border-box;
+        padding: 5px;
+        img {
+            width: 80px;
+            height: 80px;
+            margin-left: 7px;
+            margin-top: 4px;
+        }
+    }
+    .submit {
+        margin-top: 33px;
+        text-align: center;
+        font-size: 18px;
+        color: #fff;
+        .button {
+            line-height: 48px;
+            text-align: center;
+            background: #4477bc;
+        }
+    }
+}

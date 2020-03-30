@@ -74,6 +74,14 @@ const config = [
         component: lazy(() => import('../views/createProject')), // 懒加载 路由组件
     },
     {
+        path: '/projectDetail', // 路由路径
+        exact: true,
+        meta: {
+            title: '工程项目详情'
+        },
+        component: lazy(() => import('../views/projectDetail')), // 懒加载 路由组件
+    },
+    {
         path: '/approvePage', // 路由路径
         exact: true,
         meta: {

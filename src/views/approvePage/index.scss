@@ -1,20 +1,21 @@
-.approve-page{
+.approve-page {
     display: flex;
     flex-direction: column;
-    &_item{
+    &_item {
         background: #ffffff;
         display: flex;
         flex: 1;
         flex-direction: column;
         margin-bottom: 8px;
-        p{
-            font-size:15px ;
+        p {
+            font-size: 15px;
             padding: 16px 16px 0 16px;
-            &:last-child{
+            &:last-child {
                 padding-bottom: 16px;
             }
-            i{
+            i {
                 color: #999999;
+                margin-right: 5px;
             }
         }
     }
