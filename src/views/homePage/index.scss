@@ -156,9 +156,8 @@
         }
 
         &_name {
-            display: inline-flex;
             flex-basis: 65%;
-            align-items: center;
+            line-height: 26px;
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
