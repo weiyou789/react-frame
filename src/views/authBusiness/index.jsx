@@ -56,11 +56,18 @@ export default class Authbusiness extends Component {
         })
         const idcardReg = /^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/
         console.log(this.state)
-        Toast.info('身份证号有误，请重填')
+        Toast.info('身份证号有误，请重填',1)
         // if (!idcardReg.test(this.individual.credentialNumber)) {
         //     Toast('身份证号有误，请重填')
         //     return
         // }
+        try {
+            this.setState({
+                isLoading:false
+            })
+        } catch (error) {
+            
+        }
     }
     onHandleChange = (val) => {
         this.setState({ value: val });
@@ -70,6 +77,7 @@ export default class Authbusiness extends Component {
         return (
             <div className='business-page'>
                 <div className='business-page_form'>
+                <div className='business-page_form-title'>上传营业执照</div>
                     <div className='business-page_form-top'>
                         <ImagePicker
                             files={files}
@@ -101,6 +109,7 @@ export default class Authbusiness extends Component {
                             onChange={(val) => { this.onHandleChange(val) }}
                         ></InputItem>
                     </List>
+                    <div className='business-page_form-title'>请上传身份证正反面</div>
                     <div className='business-page_form-info'>
                         <div className='business-page_form-flex'>
                        
@@ -144,7 +153,7 @@ export default class Authbusiness extends Component {
                         ></InputItem>
                     </List>
                 </div>
-                <Button onClick={this.onAuthInfo} className="business-page_btn" loading={this.state.isLoading}>提交认证</Button>
+                <Button onClick={this.onAuthInfo} className="business-page_btn" loading={this.state.isLoading}  disabled={this.state.isLoading}>提交认证</Button>
 
             </div>
         )
