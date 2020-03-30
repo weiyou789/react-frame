@@ -6,7 +6,7 @@ import * as actions from '../../redux/projectRedux'
 import WxImageViewer from 'react-wx-images-viewer';
 import './index.scss'
 import { isNum, formatMoney } from '@/utils/format'
-import { seasons, type, equipmentCategory, upstreamSupplierType } from '@/utils/enum'
+import { progress, type, deviceCategory, upstreamSupplierType } from '@/utils/enum'
 
 
 
@@ -77,7 +77,7 @@ class ProjectDetail extends Component {
                 </div>
                 <div className='project-detail__layout'>
                     <div className='project-detail__tite'>工程项目进度</div>
-                    <div className='project-detail__content'>{this.getLabel(seasons, detail.progress)}</div>
+                    <div className='project-detail__content'>{this.getLabel(progress, detail.progress)}</div>
                 </div>
                 <div className='project-detail__layout'>
                     <div className='project-detail__tite'>合同总额</div>
@@ -89,7 +89,7 @@ class ProjectDetail extends Component {
                 </div>
                 <div className='project-detail__layout'>
                     <div className='project-detail__tite'>设备品类</div>
-                    <div className='project-detail__content'>{this.getLabel(equipmentCategory, detail.equipmentCategory)}</div>
+                    <div className='project-detail__content'>{this.getLabel(deviceCategory, detail.deviceCategory)}</div>
                 </div>
                 <div className='project-detail__layout'>
                     <div className='project-detail__tite'>设备品牌</div>
