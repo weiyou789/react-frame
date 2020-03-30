@@ -115,6 +115,7 @@
         }
 
         &--name {
+            justify-content: space-between;
             font-size: 17px;
             color: #333333;
         }
@@ -152,6 +153,37 @@
             -webkit-line-clamp: 2;
             /*! autoprefixer: off */
             -webkit-box-orient: vertical;
+        }
+
+        &_name {
+            display: inline-flex;
+            flex-basis: 65%;
+            align-items: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            /*! autoprefixer: off */
+            -webkit-box-orient: vertical;
+        }
+
+        &_status {
+            padding: 4px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #ffffff;
+
+            &--default {
+                background: #ff7a45;
+            }
+
+            &--success {
+                background: #66C9B3;
+            }
+
+            &--close {
+                background: #8FADD7;
+            }
         }
     }
 }

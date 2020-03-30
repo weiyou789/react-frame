@@ -8,7 +8,7 @@ import './index.scss'
 
 import * as actions from '../../redux/homeRedux'
 
-import searchIcon from '@/assets/imgs/navbar_icon_mune@2x.png'
+import searchIcon from '@/assets/imgs/navbar_icon_search@2x.png'
 @connect(
     state => state.home,
     dispatch => bindActionCreators(actions, dispatch)
@@ -40,7 +40,7 @@ class HomePage extends Component {
     }
 
     componentDidMount () {
-        this.getCustomerList()
+        // this.getCustomerList()
         const { query } = this.props.location
         if (query) {
             this.setState({
@@ -52,8 +52,9 @@ class HomePage extends Component {
             })
         }
         console.log(this.props)
+        this.onChange({ key: 2 })
         // this.getCustomerList()
-        this.getProjectpage()
+        // this.getProjectpage()
     }
 
     async getCustomerList () {
@@ -72,13 +73,14 @@ class HomePage extends Component {
         })
     }
 
-    async getProjectpage () {
+    async getProjectList () {
         const { pageNumber, pageSize, dataSource } = this.state
         await this.props.findProjectList({
             pageNumber: pageNumber,
             pageSize: pageSize,
         })
         const { projectData: { records } } = this.props
+        console.log(records)
         this.setState({
             pageNumber: pageNumber + 1,
             dataSource: dataSource.cloneWithRows(records), // 数据源dataSource
@@ -108,8 +110,19 @@ class HomePage extends Component {
 
     onChange = (value) => {
         this.setState({
-            initialPage: value.key
+            initialPage: value.key,
+            initListData: [],
+            pageNumber: 1,
+            isLoading: false, // 是否显示加载状态
+            hasMore: true
         })
+        if (value.key == 0) {
+            this.getCustomerList()
+        } else if (value.key == 1) {
+
+        } else if (value.key == 2) {
+            this.getProjectList()
+        }
     }
 
     onToSearchPage = () => {
@@ -120,7 +133,7 @@ class HomePage extends Component {
     customerRow = (rowData) => {
         return (
             <div className="list-cont_item item-row" key={rowData}>
-                <div className="item-col list-cont_item--name">{rowData.projectName}</div>
+                <div className="item-col list-cont_item--name">{rowData.companyName}</div>
                 <div className="item-col list-cont_item--phone">
                     <span className="item-col_label">电话</span>
                     <span className="item-col_text">{rowData.memberAccount}</span>
@@ -137,8 +150,40 @@ class HomePage extends Component {
         )
     }
 
+    projectRow = (rowData) => {
+        return (
+            <div className="list-cont_item item-row" key={rowData}>
+                <div className="item-col list-cont_item--name">
+                    <span className="item-col_name">{rowData.projectName}{rowData.projectName}{rowData.projectName}{rowData.projectName}</span>
+                    <span className={`item-col_status item-col_status--${this.showStatus(rowData.status).suffix}`}>{this.showStatus(rowData.status).text}</span>
+                </div>
+                <div className="item-col list-cont_item--company">
+                    <span className="item-col_label">经销商</span>
+                    <span className="item-col_text">{rowData.companyName}</span>
+                </div>
+                <div className="item-col list-cont_item--date">
+                    <span className="item-col_label">提交时间</span>
+                    <span className="item-col_text">{rowData.createTime}</span>
+                </div>
+            </div>
+        )
+    }
+
+    showStatus (status) {
+        console.log(status)
+        if (status == 1) return { suffix: 'default', text: '待提交' }
+        if (status == 2) return { suffix: 'default', text: '审核中' }
+        if (status == 3) return { suffix: 'default', text: '资料收集中' }
+        if (status == 4) return { suffix: 'default', text: '待尽调' }
+        if (status == 5) return { suffix: 'close', text: '合作关闭' }
+        if (status == 6) return { suffix: 'default', text: '待签约' }
+        if (status == 7) return { suffix: 'default', text: '待放款' }
+        if (status == 8) return { suffix: 'default', text: '贷中' }
+        if (status == 9) return { suffix: 'success', text: '合作完成' }
+    }
+
     render () {
-        const { tabs, initialPage, hasMore, pageSize, dataSource, initListData } = this.state
+        const { tabs, initialPage, hasMore, isLoading, pageSize, dataSource, initListData } = this.state
         const { children } = this.props
         return (
             <div className='home-page' >
@@ -165,7 +210,7 @@ class HomePage extends Component {
                                         className="home-page_list"
                                         dataSource={dataSource.cloneWithRows(initListData)}
                                         pageSize={pageSize}
-                                        renderRow={this.customerRow}
+                                        renderRow={initialPage == 0 ? this.customerRow : initialPage == 1 ? this.customerRow : this.projectRow}
                                         onEndReached={this.onEndReached}
                                         onEndReachedThreshold={10}
                                         scrollEventThrottle={1000}
@@ -176,7 +221,7 @@ class HomePage extends Component {
                                         )}
                                         renderFooter={() => (
                                             <div className="list-cont_item--underside">
-                                                {hasMore ? '加载中...' : '到底了~'}
+                                                {isLoading ? '加载中...' : hasMore ? '加载中...' : '到底了~'}
                                             </div>
                                         )}
                                     /> :
@@ -185,8 +230,6 @@ class HomePage extends Component {
                                     </div>
                             }
                         </div>
-                        {/* <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', backgroundColor: '#fff' }}> Content of second tab </div>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '150px', backgroundColor: '#fff' }}> Content of third tab </div> */}
                     </Tabs>
                 </div>
             </div>

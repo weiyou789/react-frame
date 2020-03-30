@@ -153,7 +153,7 @@ class SearchPage extends Component {
                             )}
                             renderFooter={() => (
                                 <div className="list-cont_item--underside">
-                                    {isLoading ? hasMore ? '加载中...' : '到底了~' : ''}
+                                    {isLoading ? '加载中...' : hasMore ? '加载中...' : '到底了~'}
                                 </div>
                             )}
                         />
