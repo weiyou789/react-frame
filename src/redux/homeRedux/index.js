@@ -15,7 +15,7 @@ const INITIAL_STATE = {
 }*/
 
 export const findCustomerList = (params) => async dispatch => {
-    const { data } = await api.findCustomerList(params)
+    const { data } = await api.findCustomerPage(params)
     dispatch({
         type: tyeps.CUSTOMER_DATA,
         payload: data
@@ -23,7 +23,7 @@ export const findCustomerList = (params) => async dispatch => {
 
 }
 export const findProjectList = (params) => async dispatch => {
-    const { data } = await api.findProjecpage(params)
+    const { data } = await api.findProjecPage(params)
     dispatch({
         type: tyeps.PROJECT_DATA,
         payload: data

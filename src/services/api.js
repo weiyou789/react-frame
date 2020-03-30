@@ -11,14 +11,14 @@ export const findMerchant = (params) => axios.get(`/merchant/api/company/boss/me
 
 export const findNesting = (params) => axios.get(ccpUrl + `/common/region/provinces/nesting`, { params })
 // 获取客户
-export const findCustomerList = (params) => axios.get('http://192.168.20.248:40000' + `/merchant/api/company/b2b/member`, { params })
+export const findCustomerPage = (params) => axios.get('http://192.168.20.248:40000' + `/merchant/api/company/b2b/member`, { params })
 
 // 注册客户
 export const addCustomer = (params) => axios.get(`/uaa/openapi/user/register`, { params })
 
 
 // 工程项目列表
-export const findProjecpage = (params) => axios.get(`/api/project/page`, { params })
+export const findProjecPage = (params) => axios.get(`/project/page`, { params })
 // 工程审批
 export const findAduitlist = (params) => axios.get(`/project/audit/${params.projectId}`)
 // 创建工程项目
