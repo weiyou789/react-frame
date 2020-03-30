@@ -10,6 +10,14 @@ const config = [
         component: lazy(() => import('../views/homePage')), // 懒加载 路由组件
     },
     {
+        path: '/searchPage',
+        exact: true,
+        meta: {
+            title: '搜索页'
+        },
+        component: lazy(() => import('../views/searchPage')), // 懒加载 路由组件
+    },
+    {
         path: '/wxauth',
         exact: true,
         meta: {

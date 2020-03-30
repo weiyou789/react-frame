@@ -1,0 +1,140 @@
+.search-page_search {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+
+    .am-search {
+        padding: 8px 16px;
+
+        &-input {
+            height: 36px;
+            border-radius: 4px;
+        }
+
+        &-synthetic-ph {
+            height: 36px;
+            line-height: 36px;
+        }
+
+        &-value {
+            height: 36px !important;
+            line-height: 36px;
+        }
+
+        &-cancel {
+            color: #333333;
+        }
+    }
+}
+
+.search-page {
+    &_result {
+        position: relative;
+        top: 44px;
+        height: calc(100vh - 46px);
+
+        &--list {
+            height: 100%;
+        }
+    }
+
+    &_list {
+        margin-top: 1px;
+        height: 100%;
+    }
+
+    &_empty {
+        margin-top: 200px;
+        text-align: center;
+        color: #999999;
+    }
+
+    .am-list-header {
+        position: relative;
+        padding: 0;
+        background: #ffffff;
+
+        &:after {
+            position: absolute;
+            content: '';
+            bottom: 0;
+            right: 0;
+            left: 16px;
+            border-bottom: 1px solid #ededed;
+            transform: scaleY(0.5);
+        }
+    }
+}
+
+.list-cont {
+
+    &_item {
+        position: relative;
+        padding: 20px 16px;
+        background: #ffffff;
+
+        &:not(:last-child) {
+            :after {
+                position: absolute;
+                content: '';
+                bottom: 0;
+                right: 0;
+                left: 16px;
+                border-bottom: 1px solid #ededed;
+                transform: scaleY(0.5);
+            }
+        }
+
+        &--name {
+            font-size: 17px;
+            color: #333333;
+        }
+
+        &--header {
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #999999;
+
+            span {
+                color: #ff7a45;
+            }
+        }
+
+        &--underside {
+            text-align: center;
+        }
+
+    }
+
+    .item-row {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .item-col {
+        display: inline-flex;
+        font-size: 15px;
+        color: #333333;
+
+        &:not(:first-child) {
+            margin-top: 16px;
+        }
+
+        &_label {
+            flex-basis: 20%;
+            color: #999999;
+        }
+
+        &_text {
+            flex-basis: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /*! autoprefixer: off */
+            -webkit-box-orient: vertical;
+        }
+    }
+}

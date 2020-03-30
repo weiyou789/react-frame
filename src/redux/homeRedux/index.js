@@ -1,4 +1,3 @@
-
 import * as tyeps from './actionTypes'
 
 import * as api from '@/services/api'
@@ -6,7 +5,7 @@ import { act } from 'react-dom/test-utils'
 
 const INITIAL_STATE = {
     customerData: {},
-    projectData:{}
+    projectData: {}
 }
 
 /*export const add = () => {
@@ -47,7 +46,7 @@ export default function test (state = INITIAL_STATE, action) {
         case tyeps.PROJECT_DATA:
             return {
                 ...state,
-                projectData:action.payload
+                projectData: action.payload
             }
         default:
             return state
