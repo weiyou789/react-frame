@@ -40,7 +40,6 @@ class HomePage extends Component {
     }
 
     componentDidMount () {
-        // this.getCustomerList()
         const { query } = this.props.location
         if (query) {
             this.setState({
@@ -51,11 +50,20 @@ class HomePage extends Component {
                 initialPage: 0
             })
         }
-        console.log(this.props)
         this.onChange({ key: 2 })
         // this.getCustomerList()
         // this.getProjectpage()
     }
+
+    // async initPage (key) {
+    //     if (key == 0) {
+    //         this.getCustomerList()
+    //     } else if (key == 1) {
+
+    //     } else if (key == 2) {
+    //         this.getProjectList()
+    //     }
+    // }
 
     async getCustomerList () {
         const { pageNumber, pageSize, dataSource } = this.state
@@ -80,7 +88,6 @@ class HomePage extends Component {
             pageSize: pageSize,
         })
         const { projectData: { records } } = this.props
-        console.log(records)
         this.setState({
             pageNumber: pageNumber + 1,
             dataSource: dataSource.cloneWithRows(records), // 数据源dataSource
@@ -90,39 +97,64 @@ class HomePage extends Component {
     }
     // 加载更多
     onEndReached = async () => {
-        const { pageNumber, pageSize, initListData } = this.state
-        if (initListData.length < this.props.customerData.total) {
-            await this.props.findCustomerList({
-                merchantCode: '668e98c9419330e4de5421e263b3bd4f',
-                pageNumber: pageNumber,
-                pageSize: pageSize
-            })
-            const { customerData: { records } } = this.props
-            this.setState({
-                initListData: this.state.initListData.concat(records)
-            })
-        } else {
-            this.setState({
-                hasMore: false
-            })
+        const { initialPage, pageNumber, pageSize, initListData } = this.state
+        if (initialPage == 0) {
+            if (initListData.length < this.props.customerData.total) {
+                await this.props.findCustomerList({
+                    merchantCode: '668e98c9419330e4de5421e263b3bd4f',
+                    pageNumber: pageNumber,
+                    pageSize: pageSize
+                })
+                const { customerData: { records } } = this.props
+                this.setState({
+                    pageNumber: pageNumber + 1,
+                    initListData: this.state.initListData.concat(records)
+                })
+            } else {
+                this.setState({
+                    hasMore: false
+                })
+            }
+        } else if (initialPage == 1) {
+
+        } else if (initialPage == 2) {
+            if (initListData.length < this.props.projectData.total) {
+                await this.props.findProjectList({
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                })
+                const { projectData: { records } } = this.props
+                this.setState({
+                    pageNumber: pageNumber + 1,
+                    initListData: this.state.initListData.concat(records)
+                })
+            } else {
+                this.setState({
+                    hasMore: false
+                })
+            }
         }
     }
 
-    onChange = (value) => {
+    onChange = ({ key }) => {
         this.setState({
-            initialPage: value.key,
+            initialPage: key,
             initListData: [],
             pageNumber: 1,
             isLoading: false, // 是否显示加载状态
             hasMore: true
-        })
-        if (value.key == 0) {
-            this.getCustomerList()
-        } else if (value.key == 1) {
+        }, () => {
+            if (key == 0) {
+                this.getCustomerList()
+            } else if (key == 1) {
 
-        } else if (value.key == 2) {
-            this.getProjectList()
-        }
+            } else if (key == 2) {
+                this.getProjectList()
+            }
+        })
+
+        // this.initPage(key)
+
     }
 
     onToSearchPage = () => {
@@ -170,7 +202,6 @@ class HomePage extends Component {
     }
 
     showStatus (status) {
-        console.log(status)
         if (status == 1) return { suffix: 'default', text: '待提交' }
         if (status == 2) return { suffix: 'default', text: '审核中' }
         if (status == 3) return { suffix: 'default', text: '资料收集中' }
@@ -226,7 +257,7 @@ class HomePage extends Component {
                                         )}
                                     /> :
                                     <div className="home-page_empty">
-                                        您还没有客户哦～
+                                        {initialPage == 0 ? '您还没有客户哦～' : initialPage == 1 ? '您还没有公司哦～' : '您还没有工程项目哦～'}
                                     </div>
                             }
                         </div>
