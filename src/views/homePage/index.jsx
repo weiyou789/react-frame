@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 // 导入组件
-import { PullToRefresh, ListView, Toast, Tabs, SearchBar } from 'antd-mobile'
+import { Tabs, ListView } from 'antd-mobile'
 // 导入样式
 import './index.scss'
 
@@ -25,10 +25,11 @@ class HomePage extends Component {
 
         this.state = {
             tabs: [
-                { title: '客户（0）' },
-                { title: '公司（0）' },
-                { title: '好橙工项目（0）' },
+                { title: '客户（0）', key: 0 },
+                { title: '公司（0）', key: 1 },
+                { title: '好橙工项目（0）', key: 2 },
             ],
+            initialPage: 0,
             dataSource,
             initListData: [],
             pageNumber: 1,
@@ -40,6 +41,16 @@ class HomePage extends Component {
 
     componentDidMount () {
         this.getCustomerList()
+        const { query } = this.props.location
+        if (query) {
+            this.setState({
+                initialPage: query.initialPage
+            })
+        } else {
+            this.setState({
+                initialPage: 0
+            })
+        }
     }
 
     async getCustomerList () {
@@ -78,6 +89,17 @@ class HomePage extends Component {
         }
     }
 
+    onChange = (value) => {
+        this.setState({
+            initialPage: value.key
+        })
+    }
+
+    onToSearchPage = () => {
+        const { initialPage } = this.state
+        this.props.history.push({ pathname: '/searchPage', query: { 'initialPage': initialPage } })
+    }
+
     customerRow = (rowData) => {
         return (
             <div className="list-cont_item item-row" key={rowData}>
@@ -99,7 +121,7 @@ class HomePage extends Component {
     }
 
     render () {
-        const { tabs, hasMore, pageSize, dataSource, initListData } = this.state
+        const { tabs, initialPage, hasMore, pageSize, dataSource, initListData } = this.state
         const { children } = this.props
         return (
             <div className='home-page' >
@@ -110,16 +132,15 @@ class HomePage extends Component {
                     <div className="home-page_header--phone">17551094260</div>
                 </div>
                 <div className="home-page_search">
-                    <div className="home-page_search--input">
+                    <div className="home-page_search--input" onClick={this.onToSearchPage}>
                         <div className="home-page_search--icon">
                             <img src={searchIcon}></img>
                         </div>
                         <div className="home-page_search--text">可输入客户姓名/公司/项目/手机号</div>
                     </div>
                 </div>
-                <div className="home-page_tabs-fixed"></div>
                 <div className="home-page_tabs">
-                    <Tabs tabs={tabs} initialPage={0}>
+                    <Tabs tabs={tabs} page={initialPage} onChange={this.onChange}>
                         <div className="home-page_tabs--list">
                             {
                                 initListData.length > 0 ?

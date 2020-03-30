@@ -1,4 +1,3 @@
-
 import {
     CUSTOMER_DATA
 } from './actionTypes'
