@@ -68,6 +68,15 @@
         .am-list-item .am-input-label {
             color: #333;
         }
+        &__text {
+            font-size: 14px;
+        }
+    }
+    .pickertext {
+        color: #000;
+    }
+    .am-list-item .am-list-line .am-list-extra {
+        display: none;
     }
     .submit {
         margin-top: 33px;

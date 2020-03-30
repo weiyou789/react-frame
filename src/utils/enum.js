@@ -1,5 +1,5 @@
 // 工程创建及详情枚举
-export const seasons =
+export const progress =
     [
         { label: '项目跟踪阶段', value: '1' },
         { label: '招投标', value: '2' },
@@ -15,7 +15,7 @@ export const type =
         { label: '厂房', value: '5' },
         { label: '其他', value: '6' }
     ]
-export const equipmentCategory =
+export const deviceCategory =
     [
         { label: '空调', value: '1' },
         { label: '采暖', value: '2' },

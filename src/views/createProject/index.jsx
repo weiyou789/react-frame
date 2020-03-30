@@ -6,8 +6,7 @@ import WxImageViewer from 'react-wx-images-viewer';
 import './index.scss'
 import { isNum, formatMoney } from '@/utils/format'
 import { creatProject, uploadFiles } from '@/services/api'
-import { seasons, type, equipmentCategory, loanMonth, upstreamSupplierType } from '@/utils/enum'
-import { object } from 'prop-types';
+import { progress, type, deviceCategory, loanMonth, upstreamSupplierType } from '@/utils/enum'
 
 const rules = {
     projectName: { message: '请输入工程项目名称' },
@@ -17,7 +16,7 @@ const rules = {
     progress: { message: '请选择工程项目进度' },
     contractAmount: { message: '请输入合同总额' },
     deviceAmount: { message: '请输入设备款总额' },
-    equipmentCategory: { message: '请选择设备品类' },
+    deviceCategory: { message: '请选择设备品类' },
     deviceBrand: { message: '请输入设备品牌' },
     upstreamSupplierType: { message: '请选择上游供应商类型' },
     upstreamSupplierName: { message: '请输入上游供应商名称' },
@@ -39,7 +38,7 @@ class createProject extends Component {
             type: '',//项目类别 1：地产项目 2：政府共建项目 3：市政项目 3：办公楼 4：厂房 5：其他，必填
             firstPartName: '',//甲方名称，必填
             contractAmount: '',//合同总额，必填
-            equipmentCategory: '',//设备品类 [] integer1：空调 2：采暖 3：新风 4：净水 5：智能化 6：辅材 7：电梯 8：其他，必填
+            deviceCategory: '',//设备品类 [] integer1：空调 2：采暖 3：新风 4：净水 5：智能化 6：辅材 7：电梯 8：其他，必填
             deviceBrand: '',//设备品牌，必填
             deviceAmount: '',//设备款总额，必填
             predictLoanAmount: '',//预估借款金额，必填
@@ -54,9 +53,9 @@ class createProject extends Component {
             realPaymentProportion: '',//交付款比例
             auditCalculationPaymentProportion: '',//审计结算款比例
             payOtherText: '',//其他回款方式内容
-            attachmentUrl: [{
-                url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg'
-            }]
+            // attachmentUrl: [{
+            //     url: 'https://zos.alipayobjects.com/rmsportal/PZUUCKTRIHWiZSY.jpeg'
+            // }]
         }
     }
 
@@ -64,11 +63,17 @@ class createProject extends Component {
     }
 
 
-    onChange (val, key, isFormat = false) {
+    onChange (val, key, isFormat = false, max = '') {
         let res = ''
         if (isFormat) {
             res = isNum(val, 100)//只能输入数字,可限制后几位（小数）
             if (isNaN(res)) res = ''
+        }
+        if (max) {
+            if (val > max) {
+                Toast.info('比例最大不能超过100%');
+                return
+            }
         }
         this.setState({
             form: {
@@ -138,9 +143,38 @@ class createProject extends Component {
         })
     }
 
-    onSave = async (status = '') => {
-        console.log(this.state.form);
-        //校验必填项
+    onsubmit = async (params) => {
+        await creatProject(params)
+        setTimeout(() => {
+            Toast.success('提交成功，请耐心等待总部审核')
+        }, 600)
+    }
+
+    // 暂存
+    onSave = async () => {
+        if (this.state.form.projectName == '') {
+            Toast.info('请输入工程项目名称');
+            return
+        }
+        const params = this.formatParmas()
+        this.onsubmit(params)
+    }
+
+    //格式化picker选择器获取的数据
+    formatParmas = () => {
+        let params = { ...this.state.form }
+        params.progress = this.state.form.progress[0]
+        params.type = this.state.form.type[0]
+        params.deviceCategory = this.state.form.deviceCategory[0]
+        params.loanMonth = this.state.form.loanMonth[0]
+        params.upstreamSupplierType = this.state.form.upstreamSupplierType[0]
+        params.upstreamPromiseMonth = this.state.form.upstreamPromiseMonth[0]
+        params.status = status
+        // params.attachmentUrl = null//todo
+        return params
+    }
+    // 提交申请
+    onApply = () => {
         let checked = true
         for (const key in rules) {
             if (this.state.form[key] == '') {
@@ -151,41 +185,32 @@ class createProject extends Component {
         }
         if (checked) {
             const { advancePaymentProportion, deliveryPaymentProportion, installProgressPaymentProportion, acceptancePaymentProportion, realPaymentProportion, auditCalculationPaymentProportion, payOtherText } = this.state.form
-            if (advancePaymentProportion || deliveryPaymentProportion || installProgressPaymentProportion || acceptancePaymentProportion ||
-                realPaymentProportion || auditCalculationPaymentProportion || payOtherText) {
-                let params = { ...this.state.form }
-                params.progress = this.state.form.progress[0]
-                params.type = this.state.form.type[0]
-                params.equipmentCategory = this.state.form.equipmentCategory[0]
-                params.loanMonth = this.state.form.loanMonth[0]
-                params.upstreamSupplierType = this.state.form.upstreamSupplierType[0]
-                params.upstreamPromiseMonth = this.state.form.upstreamPromiseMonth[0]
-                params.status = status
-                params.attachmentUrl = null//todo
-                await creatProject(params)
-                Toast.success('提交成功，请耐心等待总部审核')
-            } else {
+            if (!advancePaymentProportion && !deliveryPaymentProportion && !installProgressPaymentProportion && !acceptancePaymentProportion && !realPaymentProportion && !auditCalculationPaymentProportion && !payOtherText) {
                 Toast.info('工程项目回款方式至少填一项');
+                return
             }
+            const params = this.formatParmas()
+            Modal.alert('去认证', '提交项目需要先为经销商认证', [
+                {
+                    text: '暂不认证', onPress: () => {
+                        // do nothing
+                    }
+                },
+                {
+                    text: '去认证', onPress: async () => {
+                        this.onsubmit(params)
+                    }
+                },
+            ])
         }
-
     }
 
-    onApply = () => {
-        console.log(this.state.form);
-        Modal.alert('去认证', '提交项目需要先为经销商认证', [
-            {
-                text: '暂不认证', onPress: () => {
-                    // do nothing
-                }
-            },
-            {
-                text: '去认证', onPress: () => {
-                    console.log('ok')
-                    this.onSave()
-                }
-            },
-        ])
+    getLabel = (type, val) => {
+        let obj = {}
+        type.forEach(item => {
+            obj[item.value] = item.label
+        })
+        return obj[val] || '-'
     }
 
     render () {
@@ -211,6 +236,7 @@ class createProject extends Component {
                         <TextareaItem
                             rows={2}
                             count={200}
+                            value={this.state.form.address}
                             placeholder="请输入项目地址"
                             onChange={(val) => { this.onChange(val, 'address') }}
                         />
@@ -232,10 +258,12 @@ class createProject extends Component {
                             cols={1}
                             data={type}
                             value={[`${this.state.form.type}`]}
-                            title="项目类别"
+                            title=""
                             onOk={val => this.onChange(val, 'type')}
                         >
-                            <List.Item arrow="horizontal" className='chooseprogress'>{this.state.form.progress.length > 0 ? '' : '请选择项目类别'}</List.Item>
+                            <List.Item arrow="horizontal" className='chooseprogress'>
+                                {this.state.form.type ? <span className='pickertext'>{this.getLabel(type, this.state.form.type)}</span> : '请选择项目类别'}
+                            </List.Item>
                         </Picker>
                     </List>
                     <div className='create-project__form__title'><i>*</i>工程项目进度</div>
@@ -243,12 +271,14 @@ class createProject extends Component {
                         <Picker
                             extra=" "
                             cols={1}
-                            data={seasons}
+                            data={progress}
                             value={[`${this.state.form.progress}`]}
-                            title="工程项目进度"
+                            title=""
                             onOk={val => this.onChange(val, 'progress')}
                         >
-                            <List.Item arrow="horizontal" className='chooseprogress'>{this.state.form.progress.length > 0 ? '' : '请选择工程项目进度'}</List.Item>
+                            <List.Item arrow="horizontal" className='chooseprogress'>
+                                {this.state.form.progress ? <span className='pickertext'>{this.getLabel(progress, this.state.form.progress)}</span> : '请选择工程项目进度'}
+                            </List.Item>
                         </Picker>
                     </List>
                     <div className='create-project__form__title'><i>*</i>合同总额</div>
@@ -282,12 +312,14 @@ class createProject extends Component {
                         <Picker
                             extra=" "
                             cols={1}
-                            data={equipmentCategory}
-                            value={[`${this.state.form.equipmentCategory}`]}
-                            title="设备品类"
-                            onOk={val => this.onChange(val, 'equipmentCategory')}
+                            data={deviceCategory}
+                            value={[`${this.state.form.deviceCategory}`]}
+                            title=""
+                            onOk={val => this.onChange(val, 'deviceCategory')}
                         >
-                            <List.Item arrow="horizontal" className='chooseprogress'>{this.state.form.equipmentCategory.length > 0 ? '' : '请选择设备品类'}</List.Item>
+                            <List.Item arrow="horizontal" className='chooseprogress'>
+                                {this.state.form.deviceCategory ? <span className='pickertext'>{this.getLabel(deviceCategory, this.state.form.deviceCategory)}</span> : '请选择设备品类'}
+                            </List.Item>
                         </Picker>
                     </List>
                     <div className='create-project__form__title'><i>*</i>设备品牌</div>
@@ -307,10 +339,12 @@ class createProject extends Component {
                             cols={1}
                             data={upstreamSupplierType}
                             value={[`${this.state.form.upstreamSupplierType}`]}
-                            title="上游供应商类型"
+                            title=""
                             onOk={val => this.onChange(val, 'upstreamSupplierType')}
                         >
-                            <List.Item arrow="horizontal" className='chooseprogress'>{this.state.form.upstreamSupplierType.length > 0 ? '' : '请选择上游供应商类型'}</List.Item>
+                            <List.Item arrow="horizontal" className='chooseprogress'>
+                                {this.state.form.upstreamSupplierType ? <span className='pickertext'>{this.getLabel(upstreamSupplierType, this.state.form.upstreamSupplierType)}</span> : '请选择上游供应商类型'}
+                            </List.Item>
                         </Picker>
                     </List>
                     <div className='create-project__form__title'><i>*</i>上游供应商名称</div>
@@ -330,10 +364,12 @@ class createProject extends Component {
                             cols={1}
                             data={loanMonth}
                             value={[`${this.state.form.upstreamPromiseMonth}`]}
-                            title="上游接受承兑时间"
+                            title=""
                             onOk={val => this.onChange(val, 'upstreamPromiseMonth')}
                         >
-                            <List.Item arrow="horizontal" className='chooseprogress'>{this.state.form.upstreamPromiseMonth.length > 0 ? '' : '请选择上游接受承兑时间'}</List.Item>
+                            <List.Item arrow="horizontal" className='chooseprogress'>
+                                {this.state.form.upstreamPromiseMonth ? <span className='pickertext'>{this.getLabel(loanMonth, this.state.form.upstreamPromiseMonth)}</span> : '请选择上游接受承兑时间'}
+                            </List.Item>
                         </Picker>
                     </List>
                     <div className='create-project__form__title'><i>*</i>预估借款金额</div>
@@ -356,10 +392,12 @@ class createProject extends Component {
                             cols={1}
                             data={loanMonth}
                             value={[`${this.state.form.loanMonth}`]}
-                            title="预估借款周期"
+                            title=""
                             onOk={val => this.onChange(val, 'loanMonth')}
                         >
-                            <List.Item arrow="horizontal" className='chooseprogress'>{this.state.form.loanMonth.length > 0 ? '' : '请选择预估借款周期'}</List.Item>
+                            <List.Item arrow="horizontal" className='chooseprogress'>
+                                {this.state.form.loanMonth ? <span className='pickertext'>{this.getLabel(loanMonth, this.state.form.loanMonth)}</span> : '请选择预估借款周期'}
+                            </List.Item>
                         </Picker>
                     </List>
                     <div className='create-project__form__title'><i>*</i>工程项目回款方式（至少填一项）</div>
@@ -371,8 +409,8 @@ class createProject extends Component {
                                 extra="%"
                                 maxLength={100}
                                 value={this.state.form.advancePaymentProportion}
-                                onChange={(val) => { this.onChange(val, 'advancePaymentProportion', 'format') }}
-                            ><span style={{ fontSize: '14px' }}>预付款比例</span></InputItem>
+                                onChange={(val) => { this.onChange(val, 'advancePaymentProportion', 'format', 100) }}
+                            ><span className='create-project__form__rate__text'>预付款比例</span></InputItem>
                         </List>
                         <List>
                             <InputItem
@@ -382,8 +420,8 @@ class createProject extends Component {
                                 labelNumber={6}
                                 maxLength={100}
                                 value={this.state.form.deliveryPaymentProportion}
-                                onChange={(val) => { this.onChange(val, 'deliveryPaymentProportion', 'format') }}
-                            ><span style={{ fontSize: '14px' }}>货到付款比例</span></InputItem>
+                                onChange={(val) => { this.onChange(val, 'deliveryPaymentProportion', 'format', 100) }}
+                            ><span className='create-project__form__rate__text'>货到付款比例</span></InputItem>
                         </List>
                         <List>
                             <InputItem
@@ -393,8 +431,8 @@ class createProject extends Component {
                                 labelNumber={8}
                                 maxLength={100}
                                 value={this.state.form.installProgressPaymentProportion}
-                                onChange={(val) => { this.onChange(val, 'installProgressPaymentProportion', 'format') }}
-                            ><span style={{ fontSize: '14px' }}>安装进度款比例</span></InputItem>
+                                onChange={(val) => { this.onChange(val, 'installProgressPaymentProportion', 'format', 100) }}
+                            ><span className='create-project__form__rate__text'>安装进度款比例</span></InputItem>
                         </List>
                         <List>
                             <InputItem
@@ -403,8 +441,8 @@ class createProject extends Component {
                                 extra="%"
                                 maxLength={100}
                                 value={this.state.form.acceptancePaymentProportion}
-                                onChange={(val) => { this.onChange(val, 'acceptancePaymentProportion', 'format') }}
-                            ><span style={{ fontSize: '14px' }}>验收款比例</span></InputItem>
+                                onChange={(val) => { this.onChange(val, 'acceptancePaymentProportion', 'format', 100) }}
+                            ><span className='create-project__form__rate__text'>验收款比例</span></InputItem>
                         </List>
                         <List>
                             <InputItem
@@ -413,8 +451,8 @@ class createProject extends Component {
                                 extra="%"
                                 maxLength={100}
                                 value={this.state.form.realPaymentProportion}
-                                onChange={(val) => { this.onChange(val, 'realPaymentProportion', 'format') }}
-                            ><span style={{ fontSize: '14px' }}>交付款比例</span></InputItem>
+                                onChange={(val) => { this.onChange(val, 'realPaymentProportion', 'format', 100) }}
+                            ><span className='create-project__form__rate__text'>交付款比例</span></InputItem>
                         </List>
                         <List>
                             <InputItem
@@ -424,8 +462,8 @@ class createProject extends Component {
                                 labelNumber={8}
                                 maxLength={100}
                                 value={this.state.form.auditCalculationPaymentProportion}
-                                onChange={(val) => { this.onChange(val, 'auditCalculationPaymentProportion', 'format') }}
-                            ><span style={{ fontSize: '14px' }}>审计结算款比例</span></InputItem>
+                                onChange={(val) => { this.onChange(val, 'auditCalculationPaymentProportion', 'format', 100) }}
+                            ><span className='create-project__form__rate__text'>审计结算款比例</span></InputItem>
                         </List>
                     </div>
                     <List>
@@ -435,11 +473,11 @@ class createProject extends Component {
                             maxLength={100}
                             value={this.state.form.payOtherText}
                             onChange={(val) => { this.onChange(val, 'payOtherText', 'format') }}
-                        ><span style={{ fontSize: '14px', color: '#333' }}>其它</span></InputItem>
+                        ><span className='create-project__form__rate__text'>其它</span></InputItem>
                     </List>
                     <div className='create-project__form__title'>附件</div>
                     <div className='create-project__form__Image'>
-                        <ImagePicker
+                        {/* <ImagePicker
                             length={5}
                             multiple
                             accept="image/gif,image/jpeg,image/jpg,image/png"
@@ -447,7 +485,7 @@ class createProject extends Component {
                             onChange={this.onChangeFiles}
                             onImageClick={(index, fs) => this.openViewer(index, fs)}
                             selectable={this.state.form.attachmentUrl.length < 8}
-                        />
+                        /> */}
                     </div>
                     {
                         this.state.isOpenImg
@@ -457,7 +495,7 @@ class createProject extends Component {
                     {/* end form */}
                 </div>
                 <div className='submit'>
-                    <div onClick={() => { this.onSave(1) }} className='button' style={{ background: '#fff', flex: '1' }}>保存</div>
+                    <div onClick={this.onSave} className='button' style={{ background: '#fff', flex: '1' }}>保存</div>
                     <div onClick={this.onApply} className='button' style={{ color: '#fff', background: '#4477BC', flex: '1' }}>提交申请</div>
                 </div>
 

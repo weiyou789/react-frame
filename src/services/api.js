@@ -18,9 +18,9 @@ export const addCustomer = (params) => axios.get(`/uaa/openapi/user/register`, {
 
 
 // 工程项目列表
-export const findProjecPage = (params) => axios.get(`/project/page`, { params })
+export const findProjecPage = (params) => axios.get(`/api/project/page`, { params })
 // 工程审批
-export const findAduitlist = (params) => axios.get(`/project/audit/${params.projectId}`)
+export const findAduitlist = (params) => axios.get(`/api/project/audit/${params.projectId}`)
 // 创建工程项目
 export const creatProject = (params) => axios.post(`/api/project`, params)
 // 工程项目详情
