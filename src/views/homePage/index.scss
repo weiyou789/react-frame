@@ -170,18 +170,17 @@
             padding: 4px 14px;
             border-radius: 6px;
             font-size: 12px;
-            color: #ffffff;
 
             &--default {
-                background: #ff7a45;
+                color: #ff7a45;
             }
 
             &--success {
-                background: #66C9B3;
+                color: #52C41A;
             }
 
             &--close {
-                background: #8FADD7;
+                color: #666666;
             }
         }
     }

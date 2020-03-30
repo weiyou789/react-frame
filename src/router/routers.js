@@ -50,7 +50,7 @@ const config = [
         component: lazy(() => import('../views/addCustomer')), // 懒加载 路由组件
     }, ,
     {
-        path: '/customer',
+        path: '/customerDetail',
         exact: true,
         meta: {
             title: '客户详情'

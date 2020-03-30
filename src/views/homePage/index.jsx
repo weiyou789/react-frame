@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import moment from 'moment'
 // 导入组件
 import { Tabs, ListView } from 'antd-mobile'
 // 导入样式
@@ -72,12 +73,12 @@ class HomePage extends Component {
             pageNumber: pageNumber,
             pageSize: pageSize
         })
-        const { customerData: { records } } = this.props
+        const { customerData: { records, total } } = this.props
         this.setState({
             pageNumber: pageNumber + 1,
             dataSource: dataSource.cloneWithRows(records), // 数据源dataSource
             initListData: records,
-            isLoading: false
+            isLoading: total <= pageSize ? false : true
         })
     }
 
@@ -87,12 +88,12 @@ class HomePage extends Component {
             pageNumber: pageNumber,
             pageSize: pageSize,
         })
-        const { projectData: { records } } = this.props
+        const { projectData: { records, total } } = this.props
         this.setState({
             pageNumber: pageNumber + 1,
             dataSource: dataSource.cloneWithRows(records), // 数据源dataSource
             initListData: records,
-            isLoading: false
+            isLoading: total <= pageSize ? false : true
         })
     }
     // 加载更多
@@ -112,6 +113,7 @@ class HomePage extends Component {
                 })
             } else {
                 this.setState({
+                    isLoading: false,
                     hasMore: false
                 })
             }
@@ -130,6 +132,7 @@ class HomePage extends Component {
                 })
             } else {
                 this.setState({
+                    isLoading: false,
                     hasMore: false
                 })
             }
@@ -157,14 +160,22 @@ class HomePage extends Component {
 
     }
 
-    onToSearchPage = () => {
+    onToSearchPage () {
         const { initialPage } = this.state
-        this.props.history.push({ pathname: '/searchPage', query: { 'initialPage': initialPage } })
+        this.props.history.push({ pathname: '/searchPage', state: { 'initialPage': initialPage } })
+    }
+
+    onToCustomerInfo ({ id }) {
+        this.props.history.push({ pathname: '/customerDetail', state: { id: id } })
+    }
+
+    onToProjectInfo ({ id }) {
+        this.props.history.push({ pathname: '/projectDetail', state: { id: id } })
     }
 
     customerRow = (rowData) => {
         return (
-            <div className="list-cont_item item-row" key={rowData}>
+            <div className="list-cont_item item-row" key={rowData} onClick={() => this.onToCustomerInfo(rowData)}>
                 <div className="item-col list-cont_item--name">{rowData.companyName}</div>
                 <div className="item-col list-cont_item--phone">
                     <span className="item-col_label">电话</span>
@@ -183,8 +194,9 @@ class HomePage extends Component {
     }
 
     projectRow = (rowData) => {
+        console.log(rowData)
         return (
-            <div className="list-cont_item item-row" key={rowData}>
+            <div className="list-cont_item item-row" key={rowData} onClick={() => this.onToProjectInfo(rowData)}>
                 <div className="item-col list-cont_item--name">
                     <span className="item-col_name">{rowData.projectName}{rowData.projectName}{rowData.projectName}{rowData.projectName}</span>
                     <span className={`item-col_status item-col_status--${this.showStatus(rowData.status).suffix}`}>{this.showStatus(rowData.status).text}</span>
@@ -195,7 +207,7 @@ class HomePage extends Component {
                 </div>
                 <div className="item-col list-cont_item--date">
                     <span className="item-col_label">提交时间</span>
-                    <span className="item-col_text">{rowData.createTime}</span>
+                    <span className="item-col_text">{rowData.createTime ? moment(rowData.createTime).format("YYYY年MM月DD日 HH:mm:ss") : '-'}</span>
                 </div>
             </div>
         )
@@ -225,7 +237,7 @@ class HomePage extends Component {
                     <div className="home-page_header--phone">17551094260</div>
                 </div>
                 <div className="home-page_search">
-                    <div className="home-page_search--input" onClick={this.onToSearchPage}>
+                    <div className="home-page_search--input" onClick={() => this.onToSearchPage()}>
                         <div className="home-page_search--icon">
                             <img src={searchIcon}></img>
                         </div>
@@ -252,7 +264,7 @@ class HomePage extends Component {
                                         )}
                                         renderFooter={() => (
                                             <div className="list-cont_item--underside">
-                                                {isLoading ? '加载中...' : hasMore ? '加载中...' : '到底了~'}
+                                                {isLoading ? '加载中...' : hasMore ? '' : '到底了~'}
                                             </div>
                                         )}
                                     /> :

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import moment from 'moment'
 
 import { SearchBar, ListView } from 'antd-mobile'
 
@@ -35,7 +36,7 @@ class SearchPage extends Component {
     }
 
     componentDidMount () {
-
+        this.autoFocusInst.focus()
     }
 
     async getCustomerList () {
@@ -52,7 +53,7 @@ class SearchPage extends Component {
             total: total,
             dataSource: dataSource.cloneWithRows(records), // 数据源dataSource
             initListData: records,
-            isLoading: false
+            isLoading: total <= pageSize ? false : true
         })
     }
 
@@ -67,27 +68,45 @@ class SearchPage extends Component {
             })
             const { customerData: { records, total } } = this.props
             this.setState({
+                isLoading: true,
                 total: total,
+                pageNumber: 1,
                 initListData: this.state.initListData.concat(records)
             })
         } else {
             this.setState({
+                isLoading: false,
                 hasMore: false
             })
         }
     }
 
-    onValueChange = (value) => {
+    onClearValue = (value) => {
+        this.setState({}, () => {
+            return {
+                initListData: []
+            }
+        })
+    }
+
+    onChange = (value) => {
         this.setState({
             value: value
-        }, () => {
-            this.getCustomerList()
+        })
+    }
+
+    onSubmit = (value) => {
+        this.setState({
+            value: value,
+            pageNumber: 1
+        }, async () => {
+            await this.getCustomerList()
         })
     }
 
     onCancel = () => {
-        const { initialPage } = this.props.location.query
-        this.props.history.push({ pathname: '/', query: { 'initialPage': initialPage } })
+        const { initialPage } = this.props.location.state
+        this.props.history.push({ pathname: '/', state: { 'initialPage': initialPage } })
     }
 
     customerRow = (rowData) => {
@@ -118,13 +137,14 @@ class SearchPage extends Component {
                 <div className="search-page_search">
                     <div className="search-page_search--input">
                         <SearchBar
+                            ref={ref => this.autoFocusInst = ref}
                             value={this.state.value}
-                            // onSubmit={value => console.log(value, 'onSubmit')}
-                            // onClear={value => console.log(value, 'onClear')}
+                            onClear={this.onClearValue}
                             // onFocus={() => console.log('onFocus')}
                             // onBlur={() => console.log('onBlur')}
+                            onChange={this.onChange}
+                            onSubmit={this.onSubmit}
                             onCancel={this.onCancel}
-                            onChange={this.onValueChange}
                             placeholder="可输入客户姓名/公司/项目/手机号"
                             showCancelButton
                         />
@@ -153,7 +173,7 @@ class SearchPage extends Component {
                             )}
                             renderFooter={() => (
                                 <div className="list-cont_item--underside">
-                                    {isLoading ? '加载中...' : hasMore ? '加载中...' : '到底了~'}
+                                    {isLoading ? '加载中...' : hasMore ? '' : '到底了~'}
                                 </div>
                             )}
                         />

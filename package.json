@@ -13,6 +13,7 @@
         "dotenv": "^8.2.0",
         "echarts": "^4.6.0",
         "echarts-for-react": "^2.0.15-beta.1",
+        "moment": "^2.24.0",
         "postcss-px2rem": "^0.3.0",
         "prop-types": "^15.6.0",
         "react": "^16.13.0",
@@ -25,8 +26,7 @@
         "react-wx-images-viewer": "^1.0.6",
         "redux": "^4.0.5",
         "redux-logger": "^3.0.6",
-        "redux-thunk": "^2.3.0",
-        "vue-moment": "^4.1.0"
+        "redux-thunk": "^2.3.0"
     },
     "scripts": {
         "start": "react-app-rewired start",
