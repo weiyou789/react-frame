@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-// 导入组件
-
-// 导入样式
+import moment from "moment"
 import './index.scss'
 
 import * as actions from '../../redux/projectRedux'
@@ -30,11 +28,13 @@ class ApprovePage extends Component {
         await this.props.findAduitlist({ projectId: 1 })
         const { approveData } = this.props
         this.setState({
-            approvelist:[...approveData ]
+            approvelist: [...approveData]
         })
 
     }
-
+    timeformat = (val) => {
+        return moment(val).format("YYYY-MM-DD HH:mm:ss");
+    }
 
     render () {
         const { approvelist } = this.state
@@ -45,9 +45,9 @@ class ApprovePage extends Component {
                     approvelist && approvelist.map(item => {
                         return (
                             <div className='approve-page_item' key={item.id}>
-                                <p><i>操作人</i> {item.name}</p>
-                                <p><i>操作时间</i> 2020年03月25日 21:23:45</p>
-                                <p><i>操作内容</i> 审核通过</p>
+                                <p><i>操作人</i> {item.createBy}</p>
+                                <p><i>操作时间</i>{item.createTime ? this.timeformat(item.createTime) : '-'}</p>
+                                <p><i>操作内容</i> {item.remark}</p>
                             </div>
                         )
                     })

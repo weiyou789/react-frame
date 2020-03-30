@@ -15,21 +15,20 @@ class createProject extends Component {
         imagsIndex: '',
         form: {
             status: '',//1：待提交2：审核中 3：资料收集中 4：待尽调 5：合作关闭 6：待签约 7：待放款 8：贷中 9：合作完成
-            projectName: '',//工程项目名称
-            address: '',//项目地址
-            progress: '',//工程项目进度 ,1：项目跟踪阶段 2：招投标 3：合同已签订 4：项目已开工
-            type: '',//项目类别 1：地产项目 2：政府共建项目 3：市政项目 3：办公楼 4：厂房 5：其他
-            firstPartName: '',//甲方名称
-            contractAmount: '',//合同总额
-            equipmentCategory: '',//设备品类 [] integer1：空调 2：采暖 3：新风 4：净水 5：智能化 6：辅材 7：电梯 8：其他
-            deviceBrand: '',//设备品牌
-            deviceAmount: '',//设备款总额
-            predictLoanAmount: '',//预估借款金额
-            loanMonth: [],//预估借款周期 ,integer
-            // loanPayType: '',//工程项目回款方式,integer 1：预付款 2：货到付款 3：安装进度款 4：验收 5：交付 6：审计结算 7：其他
-            upstreamSupplierType: [],//上游供应商类型,integer 1：厂商 2：代理商 3：经销商
-            upstreamSupplierName: '',//上游供应商名称
-            upstreamPromiseMonth: [],//上游接受承兑时间,integer
+            projectName: '',//工程项目名称，必填
+            address: '',//项目地址，必填
+            progress: '',//工程项目进度 ,1：项目跟踪阶段 2：招投标 3：合同已签订 4：项目已开工，必填
+            type: '',//项目类别 1：地产项目 2：政府共建项目 3：市政项目 3：办公楼 4：厂房 5：其他，必填
+            firstPartName: '',//甲方名称，必填
+            contractAmount: '',//合同总额，必填
+            equipmentCategory: '',//设备品类 [] integer1：空调 2：采暖 3：新风 4：净水 5：智能化 6：辅材 7：电梯 8：其他，必填
+            deviceBrand: '',//设备品牌，必填
+            deviceAmount: '',//设备款总额，必填
+            predictLoanAmount: '',//预估借款金额，必填
+            loanMonth: '',//预估借款周期 ,integer，必填
+            upstreamSupplierType: '',//上游供应商类型,integer 1：厂商 2：代理商 3：经销商，必填
+            upstreamSupplierName: '',//上游供应商名称，必填
+            upstreamPromiseMonth: '',//上游接受承兑时间,integer，必填
             advancePaymentProportion: '',//预付款比例
             deliveryPaymentProportion: '',//货到付款比例
             installProgressPaymentProportion: '',//安装进度款比例
@@ -328,7 +327,7 @@ class createProject extends Component {
                             <List.Item arrow="horizontal" className='chooseprogress'>{this.state.form.loanMonth.length > 0 ? '' : '请选择预估借款周期'}</List.Item>
                         </Picker>
                     </List>
-                    <div className='create-project__form__title'><i>*</i>工程项目回款方式</div>
+                    <div className='create-project__form__title'><i>*</i>工程项目回款方式（至少填一项）</div>
                     <div className='create-project__form__rate'>
                         <List>
                             <InputItem
