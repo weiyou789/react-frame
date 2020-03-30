@@ -40,7 +40,7 @@ const config = [
             title: '创建客户'
         },
         component: lazy(() => import('../views/addCustomer')), // 懒加载 路由组件
-    },,
+    }, ,
     {
         path: '/customer',
         exact: true,
@@ -64,6 +64,14 @@ const config = [
             title: '创建工程项目'
         },
         component: lazy(() => import('../views/createProject')), // 懒加载 路由组件
+    },
+    {
+        path: '/projectDetail', // 路由路径
+        exact: true,
+        meta: {
+            title: '工程项目详情'
+        },
+        component: lazy(() => import('../views/projectDetail')), // 懒加载 路由组件
     },
     {
         path: '/approvePage', // 路由路径

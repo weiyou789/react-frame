@@ -53,9 +53,10 @@ function isPositiveInt (str) {
     }
     return str.replace(regular, '')
 }
-function formatMoney (val) {
+function formatMoney (value) { //string
     let money = ''
     let pointNum = ''
+    let val = value.toString();
     if (val.indexOf('.') > 0) {
         money = val.split(".")[0]
         pointNum = val.split(".")[1]
