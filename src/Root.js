@@ -3,12 +3,11 @@ import { Provider } from 'react-redux'
 import AppRouter from './router'
 import './styles/base.scss';
 import 'animate.css';
-import { fixInputOniOS } from '@/utils/fixInputOnIOS.js';
 
 
 export default class Root extends Component {
     componentDidMount () {
-        fixInputOniOS()
+        //全局方法
     }
     render () {
         const { store } = this.props

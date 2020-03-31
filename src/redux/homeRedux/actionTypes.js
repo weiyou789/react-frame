@@ -1,2 +1,0 @@
-export const CUSTOMER_DATA = 'CUSTOMER_DATA'
-export const PROJECT_DATA = 'PROJECT_DATA'

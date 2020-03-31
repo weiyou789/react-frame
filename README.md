@@ -1,3 +1,3 @@
-# crm_wxapp
+# react架构模版
 
-企业微信 crm
+react架构模版
