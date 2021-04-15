@@ -18,7 +18,7 @@ export const RootHoc = (...arg) => (WrappedComponent) => class extends Component
 
     render(){
         if (this.state.hasError) {
-            return <h1>页面出错，请检查代码</h1>;
+            return <h1>页面出错，请检查代码1</h1>;
         } else {
             return <WrappedComponent {...this.props}  />
         }
