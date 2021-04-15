@@ -58,5 +58,10 @@
         "husky": "^6.0.0",
         "node-sass": "^4.13.1",
         "react-app-rewired": "^2.1.5"
+    },
+    "husky":{
+        "hooks":{
+          "pre-commit":"node scripts/check-git-files"
+        }
     }
 }
