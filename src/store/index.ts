@@ -1,10 +1,10 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware,Middleware } from 'redux'
 import rootReducer from './rootReducers'
 
 // thunk 把Action封装 做异步
 import thunk from 'redux-thunk'
 
-const middlewares = [thunk]
+const middlewares:Middleware[] = [thunk]
 
 if (process.env.NODE_ENV === 'development') {
     const { logger, createLogger } = require('redux-logger')

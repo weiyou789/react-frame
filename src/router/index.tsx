@@ -5,9 +5,10 @@ import { BrowserRouter, Route, Switch, Redirect, withRouter } from 'react-router
 import { compose } from 'redux'
 
 import LoadingPage from '../layout/loadPage'
-import routers from './routers';
+import routers,{ IRoute } from './routers';
 
-const renderRoutes = routes => {
+
+const renderRoutes = (routes:IRoute[]) => {
     if (!Array.isArray(routes)) {
         return null;
     }
@@ -33,17 +34,18 @@ const renderRoutes = routes => {
                     strict={route.strict}
                     render={() => {
                         const midRouter = [withRouter,lazy]
-                        const renderChildRoutes = renderRoutes(route.children);
-                        const Wraprouter = compose(...midRouter)(route.component)
+                        // const renderChildRoutes = renderRoutes(route.children);
+                        const Wraprouter:any = compose(...midRouter)(route.component)
                         if (route.component) {
                             document.title = route.meta.title || "";
                             return (
                                 <Suspense fallback={<LoadingPage />}>
-                                    <Wraprouter route={route}>{renderChildRoutes}</Wraprouter>
+                                    {/* <Wraprouter route={route}>{renderChildRoutes}</Wraprouter> */}
+                                    <Wraprouter route={route}></Wraprouter>
                                 </Suspense>
                             );
                         }
-                        return renderChildRoutes;
+                        // return renderChildRoutes;
                     }}
                 />
             );

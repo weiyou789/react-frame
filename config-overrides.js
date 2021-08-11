@@ -28,6 +28,18 @@ const {
 } = require("customize-cra");
 const path = require("path");
 
+let _fixBabelImports = fixBabelImports('import',{
+    libraryName: 'antd',
+    style: 'css',
+})
+if(process.env.TERMINAL_TYPE==="mobile"){
+    _fixBabelImports = fixBabelImports('import',{
+        libraryName: 'antd-mobile',
+        style: 'css',
+    })
+}
+
+
 module.exports = override(
     useBabelRc(),// add .babelrc 添加可选链、空值合并运算符
     // enable legacy decorators babel plugin
@@ -37,6 +49,7 @@ module.exports = override(
     disableEsLint(),
 
     // add webpack bundle visualizer if BUNDLE_VISUALIZE flag is enabled
+
     process.env.BUNDLE_VISUALIZE == 1 && addBundleVisualizer(),
 
     // add an alias for "ag-grid-react" imports
@@ -45,11 +58,8 @@ module.exports = override(
         '@': path.join(__dirname, "src"),
 
     }),
-    fixBabelImports('import', {
-        libraryName: 'antd-mobile',
-        style: 'css',
-    }),
-    addPostcssPlugins([
+    _fixBabelImports,
+    process.env.TERMINAL_TYPE==="mobile" && addPostcssPlugins([
         require("postcss-px2rem")({ remUnit: 37.5 })
     ]),
     // adjust the underlying workbox

@@ -22,8 +22,11 @@
     "experimentalDecorators": true,
     "baseUrl": "src"
   },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
   "include": [
     "src"
-  ],
-  "extends": "./paths.json"
+  ]
 }
