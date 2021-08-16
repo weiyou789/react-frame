@@ -1,20 +1,19 @@
-import React, { Component } from 'react'
+import React, { useReducer } from 'react'
 import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
 import AppRouter from './router'
 import './styles/base.scss'
 import 'animate.css'
-// import { RootHoc } from './Hoc'
-import store from "./store";
 import '@/services/axios.js'
+import rootReducer,{ stateMap } from './rootReducers'
+import Context from './context.js'
 
-// @RootHoc()
-class Root extends Component {
-    render () {
-        return <Provider store={store}>
-            <AppRouter />
-        </Provider>
-    }
+const Root = () => {
+    const [state, dispatch] = useReducer<any>(rootReducer, stateMap);
+    return <Context.Provider value={{ state, dispatch }}>
+        <AppRouter />
+    </Context.Provider>
 }
-
-ReactDOM.render(<Root />, document.getElementById('root'))
+ReactDOM.render(
+    <Root />,
+    document.getElementById('root')
+  )

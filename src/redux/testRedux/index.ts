@@ -1,17 +1,17 @@
-import { Dispatch } from 'redux'
-import {IAction,InitState} from '../types'
+
+import {IAction,InitState,Dispatch} from '../types'
 import {
     ADD,
     MINUS
 } from './actionTypes'
 
-const INITIAL_STATE:InitState<number> = {
+export const testState:InitState<number> = {
     num: 0
 }
 
 
-export const add = () => async (dispatch:Dispatch<IAction<object>>,getState:any) => {
-    const { num } = getState()
+export const add = () => async (dispatch:Dispatch<IAction<object>>,state:InitState<number>) => {
+    const { num } = state
     let _num = num+1
     dispatch({
         type: ADD,
@@ -21,8 +21,8 @@ export const add = () => async (dispatch:Dispatch<IAction<object>>,getState:any)
     })
 }
 
-export const minus = () => async (dispatch:Dispatch<IAction<object>>,getState:any) => {
-    const { num } = getState()
+export const minus = () => async (dispatch:Dispatch<IAction<object>>,state:InitState<number>) => {
+    const { num } = state
     let _num = num-1
     dispatch({
         type: MINUS,
@@ -33,7 +33,7 @@ export const minus = () => async (dispatch:Dispatch<IAction<object>>,getState:an
 }
 
 
-export default function test (state:InitState<number> = INITIAL_STATE, action:IAction<object>) {
+export default function test (state:InitState<number> = testState, action:IAction<object>) {
     switch (action.type) {
         case ADD:
             return {

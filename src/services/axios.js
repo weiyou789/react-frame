@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { interfaceUrl } from './config'
-import store from '@/store/index'
+// import store from '@/store/index'
+// import { AsyDispatch } from '../../context.js'
 import { changeState } from '@/redux/commonRedux'
 axios.defaults.baseURL = interfaceUrl
 const requestArr = []
@@ -61,7 +62,7 @@ axios.interceptors.response.use(
                 return
             }
             // TODO: 异常统一处理
-            store.dispatch(changeState(false))
+            // store.dispatch(changeState(false))
             // Toast('服务器响应错误,请联系管理')
             return Promise.reject(error)
         }
