@@ -1,0 +1,39 @@
+.layout {
+    &-aside {
+        height: calc(100vh - 50px);
+        background: #333333 !important;
+
+        &__menu {
+            overflow-y: overlay;
+            height: calc(100% - 60px);
+        }
+    }
+}
+
+.aside {
+    &-menu {
+        &__theme {
+            color: #ffffff !important;
+            background: #333333 !important;
+        }
+
+        &__switch {
+            margin: 0 24px;
+            padding: 18px 0;
+            border-top: 1px solid #292929;
+
+            &--icon {
+                font-size: 16px !important;
+                color: #ffffff !important;
+                cursor: pointer !important;
+            }
+
+            &--text {
+                margin-left: 10px;
+                font-size: 14px;
+                color: #BFBFBF;
+                cursor: pointer;
+            }
+        }
+    }
+}

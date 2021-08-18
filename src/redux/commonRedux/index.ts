@@ -1,5 +1,5 @@
 import { LOAD_STATE, NEST_DATA } from "./actionTypes";
-import * as Api from '../../services/api'
+import * as Api from '@/services/api'
 import {IAction,InitState,Dispatch} from '../types'
 
 export const commonState:InitState<any> = {

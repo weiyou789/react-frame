@@ -1,0 +1,122 @@
+/**
+  * 浏览器默认样式重置
+  **/
+* {
+    margin: 0;
+    outline: none;
+}
+
+body {
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul,
+li {
+    padding: 0;
+    list-style: none;
+}
+
+.ant-menu-submenu-title {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.ant-menu-submenu-arrow {
+    color: #999;
+}
+
+.ant-menu-submenu:hover>.ant-menu-submenu-title>.ant-menu-submenu-expand-icon,
+.ant-menu-submenu:hover>.ant-menu-submenu-title>.ant-menu-submenu-arrow {
+    color: #fff;
+}
+
+.ant-menu-inline,
+.ant-menu-vertical,
+.ant-menu-vertical-left {
+    border-right: 0;
+}
+
+.ant-menu-sub.ant-menu-inline {
+    color: #999;
+    background: #333333;
+}
+
+.ant-menu-item a {
+    color: #999;
+}
+
+.ant-menu-item a:hover {
+    color: #ffffff;
+}
+
+.ant-menu-item a:active {
+    color: #ffffff !important;
+}
+
+.ant-menu-submenu-selected {
+    color: #fff;
+}
+
+.ant-menu-light .ant-menu-item:hover,
+.ant-menu-light .ant-menu-item-active,
+.ant-menu-light .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open,
+.ant-menu-light .ant-menu-submenu-active,
+.ant-menu-light .ant-menu-submenu-title:hover {
+    color: #ffffff;
+}
+
+.ant-menu-item:active,
+.ant-menu-submenu-title:active {
+    background: #1890FF;
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: #1890FF;
+
+    .menu-item__inner--label {
+        color: #ffffff;
+    }
+
+    /deep/ .menu-item__inner--icon {
+        color: #ffffff;
+    }
+}
+
+.ant-menu-submenu-selected {
+    .ant-menu-submenu-arrow {
+        color: #fff;
+    }
+}
+
+
+.ant-menu {
+    .ant-menu-submenu-title {
+        padding-left: 24px !important;
+    }
+
+    .ant-menu-submenu {
+        .ant-menu {
+            .ant-menu-submenu-title {
+                padding-left: 52px !important;
+                font-size: 12px !important;
+            }
+
+            .ant-menu-item {
+                padding-left: 56px !important;
+                font-size: 12px !important;
+            }
+
+            .ant-menu-submenu {
+                .ant-menu {
+                    .ant-menu-item {
+                        padding-left: 76px !important;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,14 @@
+// 垂直水平居中
+.vertical-horizontal-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+// 图片自适应
+.imageAdaption {
+    @extend .vertical-horizontal-center;
+    max-width: 100%;
+    max-height: 100%;
+}
