@@ -42,7 +42,7 @@ const renderRoutes = (routes:any) => {
                         path={route.path}
                         exact={route.exact}
                         render={(props) => {
-                            const midRouter = [withRouter,lazy]
+                            const midRouter = [lazy]
                             const renderchildren = renderRoutes(route.children)
                             let WrapCom = route.isLazy?compose(...midRouter)(route.component):route.component
                             if (route.component) {
